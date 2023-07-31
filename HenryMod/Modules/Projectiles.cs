@@ -1,26 +1,111 @@
-﻿using R2API;
+﻿using FirstLightMod.Components;
+using IL.RoR2.Items;
+using R2API;
 using RoR2;
 using RoR2.Projectile;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 
-namespace HenryMod.Modules
+namespace FirstLightMod.Modules
 {
     internal static class Projectiles
     {
+        
+        //Deployables may also be treated as new projectiles?
         internal static GameObject bombPrefab;
+        //internal static GameObject shovelPrefab;
+        internal static GameObject grovePrefab;
 
-        internal static void RegisterProjectiles()
+        //internal static GameObject RazorGrenadePrefab;
+        //internal static GameObject RazorGrenadeGhost;
+
+
+
+        internal static void RegisterProjectiles() 
         {
             CreateBomb();
+            //CreateGrenades();
+            //CreateShovel();
+            CreateGrove();
 
             AddProjectile(bombPrefab);
+            //AddProjectile(shovelPrefab);
+            AddProjectile(grovePrefab);
         }
 
         internal static void AddProjectile(GameObject projectileToAdd)
         {
             Modules.Content.AddProjectilePrefab(projectileToAdd);
         }
+
+
+        //private static void CreateGrenades()
+        //{
+        //    RazorGrenadePrefab = CloneProjectilePrefab("CryoCannisterProjectile", "RazorGrenade");
+        //    RazorGrenadeGhost = CreateGhostPrefab("CryoCannisterGhost");
+
+
+
+        //}
+
+
+        private static void CreateShovel()
+        {
+            //shovelPrefab = CloneProjectilePrefab("ToolbotGrenadeLauncherProjectile", "shovel");
+            //Rigidbody rigidbody = shovelPrefab.GetComponent<Rigidbody>();
+            //rigidbody.useGravity = true;
+
+            //shovelPrefab.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+
+            //ProjectileController shovelController = shovelPrefab.GetComponent<ProjectileController>();
+            //shovelController.ghostPrefab = CreateGhostPrefab("ShovelGhost");
+
+            //ProjectileSimple ps = shovelPrefab.GetComponent<ProjectileSimple>();
+            //ps.desiredForwardSpeed = 200f;
+
+            //ProjectileImpactExplosion impactExplosion = shovelPrefab.GetComponent<ProjectileImpactExplosion>();
+            //impactExplosion.blastRadius = 20;
+            //impactExplosion.falloffModel = BlastAttack.FalloffModel.SweetSpot;
+
+            //impactExplosion.impactEffect = LegacyResourcesAPI.Load<GameObject>("prefabs/effects/omnieffect/OmniExplosionVFX");
+
+        }
+
+        private static void CreateGrove()
+        {
+            //grovePrefab = CloneProjectilePrefab("EngiMine", "FarmGrove");
+       
+
+
+            //grovePrefab = CloneProjectilePrefab("EngiBubbleShield", "FarmGrove");
+            //UnityEngine.GameObject.Destroy(grovePrefab.GetComponent<ProjectileController>());
+
+
+            grovePrefab = PrefabAPI.InstantiateClone(LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/MushroomWard"), "FarmGrove", true); //the mushrooom field
+            //MushroomWard has a healingWard
+
+            ////These components should already be a part of the prefab but this is for safety
+
+            if (grovePrefab.GetComponent<TeamFilter>() == null)
+            {
+                grovePrefab.AddComponent<TeamFilter>();
+            }
+            HealingWard groveHealingWard = grovePrefab.GetComponent<HealingWard>();
+
+
+            Components.BungalGroveController groveController = grovePrefab.AddComponent<BungalGroveController>();
+
+            groveController.groveHealingWard = groveHealingWard;
+            groveController.owner = grovePrefab.gameObject;
+
+            grovePrefab.AddComponent<DestroyOnTimer>().duration = 10f;
+            
+            
+        }
+
+
+        #region Bomb
 
         private static void CreateBomb()
         {
@@ -75,6 +160,9 @@ namespace HenryMod.Modules
 
             return ghostPrefab;
         }
+
+
+        #endregion
 
         private static GameObject CloneProjectilePrefab(string prefabName, string newPrefabName)
         {

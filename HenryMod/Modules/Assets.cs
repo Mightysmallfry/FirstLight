@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using RoR2.UI;
 using System;
 
-namespace HenryMod.Modules
+namespace FirstLightMod.Modules
 {
     internal static class Assets
     {
@@ -27,9 +27,9 @@ namespace HenryMod.Modules
         internal static AssetBundle mainAssetBundle;
 
         // CHANGE THIS
-        private const string assetbundleName = "myassetbundle";
+        private const string assetbundleName = "THEassetbundle";
         //change this to your project's name if/when you've renamed it
-        private const string csProjName = "HenryMod";
+        private const string csProjName = "FirstLightMod";
         
         internal static void Initialize()
         {

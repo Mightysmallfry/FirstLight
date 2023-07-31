@@ -3,15 +3,20 @@ using RoR2;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
-using HenryMod;
+using FirstLightMod;
 using UnityEngine;
+using static RoR2.SkillLocator;
 
-namespace HenryMod.Modules
+namespace FirstLightMod.Modules
 {
 
     internal static class Skills
     {
         #region genericskills
+
+        //Do I make a passive locator component?
+        public static GenericSkill passiveSkill;
+
         public static void CreateSkillFamilies(GameObject targetPrefab, bool destroyExisting = true)
         {
             if (destroyExisting)
@@ -24,10 +29,12 @@ namespace HenryMod.Modules
 
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();
 
+            passiveSkill = CreateGenericSkillWithSkillFamily(targetPrefab, "Misc");
             skillLocator.primary = CreateGenericSkillWithSkillFamily(targetPrefab, "Primary");
             skillLocator.secondary = CreateGenericSkillWithSkillFamily(targetPrefab, "Secondary");
             skillLocator.utility = CreateGenericSkillWithSkillFamily(targetPrefab, "Utility");
             skillLocator.special = CreateGenericSkillWithSkillFamily(targetPrefab, "Special");
+
         }
 
         public static GenericSkill CreateGenericSkillWithSkillFamily(GameObject targetPrefab, string familyName, bool hidden = false)
@@ -42,7 +49,7 @@ namespace HenryMod.Modules
 
             skill._skillFamily = newFamily;
 
-            HenryMod.Modules.Content.AddSkillFamily(newFamily);
+            FirstLightMod.Modules.Content.AddSkillFamily(newFamily);
             return skill;
         }
         #endregion
@@ -68,6 +75,12 @@ namespace HenryMod.Modules
             {
                 AddSkillToFamily(skillFamily, skillDef);
             }
+        }
+
+
+        public static void AddPassiveSkills(GameObject targetPrefab, params SkillDef[] skillDefs)
+        {
+            AddSkillsToFamily(Modules.Skills.passiveSkill.skillFamily, skillDefs);
         }
 
         public static void AddPrimarySkills(GameObject targetPrefab, params SkillDef[] skillDefs)
@@ -140,7 +153,7 @@ namespace HenryMod.Modules
 
             skillDef.keywordTokens = skillDefInfo.keywordTokens;
 
-            HenryMod.Modules.Content.AddSkillDef(skillDef);
+            FirstLightMod.Modules.Content.AddSkillDef(skillDef);
 
 
             return skillDef;

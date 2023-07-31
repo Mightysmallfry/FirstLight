@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FirstLightMod.Modules.Achievements
 {
-    internal class MasteryAchievement : BaseMasteryUnlockable
+    internal class FarmerMasteryAchievement : BaseMasteryUnlockable
     {
         public override string AchievementTokenPrefix => FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_MASTERY";
         //the name of the sprite in your bundle

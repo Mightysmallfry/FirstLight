@@ -1,12 +1,12 @@
 ﻿using BepInEx.Configuration;
 using RoR2;
 using System;
-using HenryMod.Modules.Characters;
+using FirstLightMod.Modules.Characters;
 using UnityEngine;
 using System.Collections.Generic;
 using RoR2.Skills;
 
-namespace HenryMod.Modules.Survivors
+namespace FirstLightMod.Modules.Survivors
 {
     internal abstract class SurvivorBase : CharacterBase
     {

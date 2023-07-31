@@ -5,7 +5,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace HenryMod.SkillStates.BaseStates
+namespace FirstLightMod.SkillStates.BaseStates
 {
     public class BaseMeleeAttack : BaseSkillState
     {

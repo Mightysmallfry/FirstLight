@@ -1,16 +1,19 @@
-﻿using RoR2;
+﻿using IL.RoR2.ExpansionManagement;
+using RoR2;
 using RoR2.ContentManagement;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HenryMod.Modules
+namespace FirstLightMod.Modules
 {
     internal class ContentPacks : IContentPackProvider
     {
         internal ContentPack contentPack = new ContentPack();
-        public string identifier => HenryPlugin.MODUID;
+        public string identifier => FirstLightPlugin.MODUID;
+
+        public static List<RoR2.ExpansionManagement.ExpansionDef> expansionDefs = new List<RoR2.ExpansionManagement.ExpansionDef>();
 
         public static List<GameObject> bodyPrefabs = new List<GameObject>();
         public static List<GameObject> masterPrefabs = new List<GameObject>();
@@ -41,6 +44,8 @@ namespace HenryMod.Modules
         public System.Collections.IEnumerator LoadStaticContentAsync(LoadStaticContentAsyncArgs args)
         {
             this.contentPack.identifier = this.identifier;
+
+            contentPack.expansionDefs.Add(expansionDefs.ToArray());
 
             contentPack.bodyPrefabs.Add(bodyPrefabs.ToArray());
             contentPack.masterPrefabs.Add(masterPrefabs.ToArray());
@@ -78,6 +83,10 @@ namespace HenryMod.Modules
 
     internal class Content
     {
+        public static void AddExpansionDef(RoR2.ExpansionManagement.ExpansionDef expansionDef)
+        {
+            ContentPacks.expansionDefs.Add(expansionDef);
+        }
         public static void AddCharacterBodyPrefab(GameObject bprefab)
         {
 
@@ -116,7 +125,6 @@ namespace HenryMod.Modules
         }
         public static void AddEntityState(Type entityState)
         {
-
             ContentPacks.entityStates.Add(entityState);
         }
 

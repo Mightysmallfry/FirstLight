@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HenryMod.Modules
+namespace FirstLightMod.Modules
 {
     internal static class StaticValues
     {
@@ -15,5 +15,24 @@ namespace HenryMod.Modules
         internal const float gunDamageCoefficient = 4.2f;
 
         internal const float bombDamageCoefficient = 16f;
+
+
+        #region Farmer
+        internal const float farmerPassiveAttackSpeedCapCoefficient = 1f;
+        internal const float farmerPassiveAttackSpeedCoefficient = 1.15f; // 15%increase
+
+        internal const float shotgunDamageCoefficient = 1.2f;
+        internal const float superShotgunDamageCoefficient = 1.2f;
+
+        internal const float cannonDamageCoefficient = 2.4f;
+        internal const float superCannonDamageCoefficient = 2.4f;
+
+        internal const float shovelDamageCoefficient = 3f;
+        internal const float forkDamageCoefficient = 3f;
+
+        internal const float bungalHealingCoefficient = 2.5f;
+        internal const float bungalAdditionalHealingCoefficient = 2.5f;
+
+        #endregion
     }
 }

@@ -15,7 +15,7 @@
   <ItemGroup>
     <None Remove="HenryBank.bnk" />
     <None Remove="Modules\Characters\Henry.cs~RF6221a098.TMP" />
-    <None Remove="myassetbundle" />
+    <None Remove="THEassetbundle" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -30,7 +30,7 @@
 	
   <ItemGroup>
     <EmbeddedResource Include="HenryBank.bnk" />
-    <EmbeddedResource Include="myassetbundle" />
+    <EmbeddedResource Include="THEassetbundle" />
   </ItemGroup>
 
   <ItemGroup>

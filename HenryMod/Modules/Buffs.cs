@@ -1,13 +1,19 @@
-﻿using RoR2;
+﻿using R2API;
+using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HenryMod.Modules
+namespace FirstLightMod.Modules
 {
     public static class Buffs
     {
         // armor buff gained during roll
         internal static BuffDef armorBuff;
+
+        // Farmer's Passive
+        public static BuffDef farmerPassive;
+
+        static string farmerPrefix = FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_";
 
         internal static void RegisterBuffs()
         {
@@ -16,6 +22,13 @@ namespace HenryMod.Modules
                 Color.white, 
                 false, 
                 false);
+
+            farmerPassive = AddNewBuff(farmerPrefix + "PASSIVE_NAME",
+                Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                new Color(255f / 255f, 0f / 255f, 84f / 255f),
+                false,
+                false);
+
         }
 
         // simple helper method
@@ -33,5 +46,8 @@ namespace HenryMod.Modules
 
             return buffDef;
         }
+
+
+
     }
 }
