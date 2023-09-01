@@ -67,7 +67,7 @@ namespace FirstLightMod.Modules.Items
         {
             ItemDef = ScriptableObject.CreateInstance<ItemDef>();
             ItemDef.name = prefix + ItemNameToken;
-            ItemDef.nameToken = prefix + ItemNameToken + "_Name";
+            ItemDef.nameToken = prefix + ItemNameToken + "_NAME";
             ItemDef.pickupToken = prefix + ItemNameToken + "_PICKUP";
             ItemDef.descriptionToken = prefix + ItemNameToken + "_DESCRIPTION";
             ItemDef.loreToken = prefix + ItemNameToken + "_LORE";

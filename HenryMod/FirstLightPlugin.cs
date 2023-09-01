@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using FirstLightMod.Content.Items;
 using FirstLightMod.Modules;
 using FirstLightMod.Modules.Items;
 using FirstLightMod.Modules.Survivors;
@@ -41,6 +42,8 @@ namespace FirstLightMod
 
 
         public static FirstLightPlugin instance;
+
+        public KrisBlade KrisBlade;
         
         private void Awake()
         {
@@ -57,7 +60,9 @@ namespace FirstLightMod
             Modules.Tokens.AddTokens(); // register name tokens
             Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
 
+            KrisBlade = new KrisBlade();
 
+            KrisBlade.Init(mainConfig);
 
             //  ---------------------------------------- UNLOCKABLES/ACHIEVEMENTS
             //Modules.FLUnlockables.RegisterUnlockables(); // Out of commission due to updating nuget
