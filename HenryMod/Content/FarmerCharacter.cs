@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using FirstLightMod.Modules.Characters;
+using FirstLightMod.SkillStates.Farmer;
 using On.EntityStates.CaptainSupplyDrop;
 using RoR2;
 using RoR2.Skills;
@@ -35,6 +36,7 @@ namespace FirstLightMod.Modules.Survivors
         public static SkillDef shovelSkillDef;
         public static SkillDef pitchforkSkillDef;
         public static SkillDef razorWireGrenadeSkillDef;
+        public static SkillDef reapSkillDef;
 
         public static SkillDef groveSkillDef;
         public static SkillDef superGroveSkillDef;
@@ -110,6 +112,12 @@ namespace FirstLightMod.Modules.Survivors
             Modules.Skills.CreateSkillFamilies(bodyPrefab);
             string prefix = FirstLightPlugin.DEVELOPER_PREFIX;
 
+            InitializePassiveSkills(prefix);
+            InitializePrimarySkills(prefix);
+            InitializeSecondarySkills(prefix);
+            InitializeUtilitySkills(prefix);
+            InitializeSpecialSkills(prefix);
+            InitializeHooks();
 
 
             //skillLocator.passiveSkill.skillNameToken = FARMER_PREFIX + "ALT_PASSIVE_NAME";
@@ -117,15 +125,9 @@ namespace FirstLightMod.Modules.Survivors
             //skillLocator.passiveSkill.icon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon");
             //skillLocator.passiveSkill.enabled = false; //hopefully this is not used by others.
 
-            
 
-            InitializePassiveSkills(prefix);
-            InitializePrimarySkills(prefix);
-            InitializeSecondarySkills(prefix);
-            InitializeUtilitySkills(prefix);
-            InitializeSpecialSkills(prefix);
-            InitializeHooks();
-           
+
+
         }
 
 
@@ -392,6 +394,38 @@ namespace FirstLightMod.Modules.Survivors
 
             Modules.Skills.AddSecondarySkills(bodyPrefab, pitchforkSkillDef);
 
+
+            #endregion
+
+
+
+            #region Reap
+
+            reapSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            {
+                skillName = prefix + "_HENRY_BODY_SECONDARY_REAP_NAME",
+                skillNameToken = prefix + "_HENRY_BODY_SECONDARY_REAP_NAME",
+                skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_REAP_DESCRIPTION",
+                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(Reap)),
+                activationStateMachineName = "Weapon",
+                baseMaxStock = 2,
+                baseRechargeInterval = 1f,
+                beginSkillCooldownOnSkillEnd = false,
+                canceledFromSprinting = true,
+                forceSprintDuringState = false,
+                fullRestockOnAssign = true,
+                interruptPriority = EntityStates.InterruptPriority.Skill,
+                resetCooldownTimerOnUse = false,
+                isCombatSkill = true,
+                mustKeyPress = true,
+                cancelSprintingOnActivation = true,
+                rechargeStock = 1, 
+                requiredStock = 1,
+                stockToConsume = 1,
+            });
+
+            Modules.Skills.AddSecondarySkills(bodyPrefab, reapSkillDef);
 
             #endregion
 

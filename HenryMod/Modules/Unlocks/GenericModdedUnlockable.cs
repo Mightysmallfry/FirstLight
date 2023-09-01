@@ -1,11 +1,12 @@
 ﻿using RoR2;
+using RoR2.Achievements;
 using System;
 using UnityEngine;
 using R2API;
 
-namespace FirstLightMod.Modules
+namespace FirstLightMod.Modules.Unlocks
 {
-    public abstract class GenericModdedUnlockable : ModdedUnlockable
+    public abstract class GenericModdedUnlockable : ModdedUnlockable, IModdedUnlockableDataProvider
     {
         public abstract string AchievementTokenPrefix { get; }
         public abstract string AchievementSpriteName { get; }

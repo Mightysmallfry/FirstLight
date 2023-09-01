@@ -2,7 +2,6 @@
 using R2API;
 using FirstLightMod;
 using FirstLightMod.Content.Achievements;
-using FirstLightMod.Modules.Achievements;
 
 namespace FirstLightMod.Modules
 {
@@ -19,8 +18,8 @@ namespace FirstLightMod.Modules
 
             // Why no worky game!? T-T
             //farmerMasteryUnlockableDef = Config.forceFarmerMasteryUnlock.Value ? null : UnlockableAPI.AddUnlockable<FarmerMasteryAchievement>();
-            
-            
+
+
         }
     }
 }

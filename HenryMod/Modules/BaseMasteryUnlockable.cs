@@ -1,5 +1,4 @@
-﻿using FirstLightMod.Modules.Unlocks;
-using RoR2;
+﻿using RoR2;
 
 namespace FirstLightMod.Modules
 {

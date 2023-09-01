@@ -27,11 +27,11 @@ namespace FirstLightMod.Modules
             CreateBomb();
             //CreateGrenades();
             //CreateShovel();
-            CreateGrove();
+            //CreateGrove();
 
             AddProjectile(bombPrefab);
             //AddProjectile(shovelPrefab);
-            AddProjectile(grovePrefab);
+            //AddProjectile(grovePrefab);
         }
 
         internal static void AddProjectile(GameObject projectileToAdd)

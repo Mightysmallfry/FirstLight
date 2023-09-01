@@ -3,15 +3,34 @@ using BepInEx.Configuration;
 using RoR2;
 using R2API;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net.NetworkInformation;
+
+using HarmonyLib;
+
 
 namespace FirstLightMod.Modules.Items
 {
+
+    // The directly below is entirely from TILER2 API (by ThinkInvis) specifically the Item module. Utilized to keep instance checking functionality as I migrate off TILER2.
+    // TILER2 API can be found at the following places:
+    // https://github.com/ThinkInvis/RoR2-TILER2
+    // https://thunderstore.io/package/ThinkInvis/TILER2/
+
+    public abstract class ItemBase<T> : ItemBase where T : ItemBase<T>
+    {
+        public static T instance { get; private set; }
+
+        public ItemBase()
+        {
+            if (instance != null) throw new InvalidOperationException("Singleton class \"" + typeof(T).Name + "\" inheriting ItemBase was instantiated twice");
+            instance = this as T;
+        }
+    }
+
+
     public abstract class ItemBase
     {
-        string prefix = FirstLightPlugin.DEVELOPER_PREFIX + "_ITEM_";
+        string prefix = "ITEM_";
+        //string prefix = FirstLightPlugin.DEVELOPER_PREFIX + "_ITEM_";
 
         public abstract string ItemName { get; }
         public abstract string ItemNameToken { get; }
@@ -29,6 +48,7 @@ namespace FirstLightMod.Modules.Items
         public virtual bool Hidden { get; } = false;
 
         public ItemDef ItemDef;
+
         public abstract void Init(ConfigFile config);
 
 
@@ -55,8 +75,9 @@ namespace FirstLightMod.Modules.Items
             ItemDef.pickupIconSprite = ItemIcon;
             ItemDef.hidden = false;
             ItemDef.canRemove = CanRemove;
-            ItemDef.tier = Tier;
             ItemDef.tags = ItemTags;
+            ItemDef.deprecatedTier = Tier;
+
 
             var itemDisplayRulesDict = CreateItemDisplayRules();
             ItemAPI.Add(new CustomItem(ItemDef, itemDisplayRulesDict));
@@ -78,6 +99,7 @@ namespace FirstLightMod.Modules.Items
 
             return master.inventory.GetItemCount(ItemDef);  
         }
+
 
     }
 }

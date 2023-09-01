@@ -1,8 +1,9 @@
-﻿using RoR2;
+﻿using FirstLightMod.Modules;
+using RoR2;
 using System;
 using UnityEngine;
 
-namespace FirstLightMod.Modules.Achievements
+namespace FirstLightMod.Content.Achievements
 {
     internal class FarmerMasteryAchievement : BaseMasteryUnlockable
     {

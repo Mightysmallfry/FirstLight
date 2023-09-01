@@ -6,24 +6,25 @@ using UnityEngine;
 using static FirstLightMod.FirstLightPlugin;
 using static FirstLightMod.Modules.Items.ItemHelper;
 using UnityEngine.Networking;
-
+using System;
+using UnityEngine.AddressableAssets;
 
 namespace FirstLightMod.Content.Items
 {
-    public class KrisBlade : ItemBase
+    public class KrisBlade : ItemBase<KrisBlade>
     {
         public override string ItemName => "Kris Blade";
         public override string ItemNameToken => "KRIS_BLADE";
         public override string ItemPickupDescription => "Deal massively increased bleed damage";
         public override string ItemFullDescription => $"Gain {initialBleedChance}% bleed chance, all bleed damage is also increased by <style=cIsDamage>{100f* InitialBleedPercentage}</style>, this percentage is increased by <style=cStack>(+{100f * AdditionalBleedPercentage}) per additional item.";
         public override string ItemLore => "A finely made blade that retains its edge. Viscera beware.";
-        public override ItemTier Tier => ItemTier.Tier2;
+        public override ItemTier Tier => ItemTier.Tier3;
 
         //public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage }; // I can uncomment this once I figure out what is happening with the load issue
-        public override GameObject ItemModel => Resources.Load<GameObject>("Prefabs/PickupModels/PickupMystery"); //Again tri-tip dagger
-        public override Sprite ItemIcon => Resources.Load<Sprite>("Textures/MiscIcons/texMysteryIcon"); //Could use tri-tip dagger for now
+        public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(); //Again tri-tip dagger
+        public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(); //Could use tri-tip dagger for now
 
-        public static GameObject ItemBodyModelPrefab;
+        //public static GameObject ItemBodyModelPrefab;
 
         public float initialBleedChance;
         public float InitialBleedPercentage;
@@ -118,9 +119,7 @@ namespace FirstLightMod.Content.Items
                 self.bleedChance += initialBleedChance;
             }
         }
-
-
-        private void DotController_AddDot(On.RoR2.DotController.orig_AddDot orig, DotController self, GameObject attackerObject, float duration, DotController.DotIndex dotIndex, float damageMultiplier, uint? maxStacksFromAttacker, float? totalDamage)
+        private void DotController_AddDot(On.RoR2.DotController.orig_AddDot orig, DotController self, GameObject attackerObject, float duration, DotController.DotIndex dotIndex, float damageMultiplier, uint? maxStacksFromAttacker, float? totalDamage, DotController.DotIndex? preUpgradeDotIndex)
         {
             var itemCount = GetCount(attackerObject.GetComponent<CharacterBody>());
 
@@ -129,7 +128,8 @@ namespace FirstLightMod.Content.Items
                 damageMultiplier = 1f + InitialBleedPercentage + ((itemCount - 1) * AdditionalBleedPercentage);
             }
 
-            orig(self, attackerObject, duration, dotIndex, damageMultiplier, maxStacksFromAttacker, totalDamage);
+            orig(self, attackerObject, duration, dotIndex, damageMultiplier, maxStacksFromAttacker, totalDamage, preUpgradeDotIndex);
         }
+
     }
 }

@@ -1,14 +1,10 @@
 ﻿using BepInEx;
-using FirstLightMod.Content;
 using FirstLightMod.Modules;
 using FirstLightMod.Modules.Items;
 using FirstLightMod.Modules.Survivors;
-using IL.RoR2.ContentManagement;
-using IL.RoR2.ExpansionManagement;
 using R2API;
 using R2API.Utils;
 using RoR2;
-using System.Collections.Generic;
 using System.Security;
 using System.Security.Permissions;
 using UnityEngine;
@@ -60,7 +56,11 @@ namespace FirstLightMod
             Modules.Projectiles.RegisterProjectiles(); // add and register custom projectiles
             Modules.Tokens.AddTokens(); // register name tokens
             Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
-            Modules.FLUnlockables.RegisterUnlockables();
+
+
+
+            //  ---------------------------------------- UNLOCKABLES/ACHIEVEMENTS
+            //Modules.FLUnlockables.RegisterUnlockables(); // Out of commission due to updating nuget
 
             // survivor initialization
             new FarmerCharacter().Initialize();
@@ -69,7 +69,7 @@ namespace FirstLightMod
             // - See if this fixes it, separated the functions and gave it a proper configFile var
             // - It did not, something is wrong with loading the items
             // - Current thoughts are ItemDef.Tier
-            itemHelper.LoadAllItems();
+            //itemHelper.LoadAllItems();
 
             //Add the Expansion definition to the content Pack
             ApplyExpansion();
@@ -97,7 +97,8 @@ namespace FirstLightMod
         private void ApplyExpansion()
         {
             string prefix = DEVELOPER_PREFIX + "_EXPANSION_";
-            RoR2.ExpansionManagement.ExpansionDef expansionDef = new RoR2.ExpansionManagement.ExpansionDef();
+            //RoR2.ExpansionManagement.ExpansionDef expansionDef = new RoR2.ExpansionManagement.ExpansionDef();
+            RoR2.ExpansionManagement.ExpansionDef expansionDef = ScriptableObject.CreateInstance<RoR2.ExpansionManagement.ExpansionDef>();
             expansionDef.name = "First Light";
             // Is there a nicer way to do the tokens?
             expansionDef.nameToken = prefix + "FIRST_LIGHT_NAME";

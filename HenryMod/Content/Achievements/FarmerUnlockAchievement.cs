@@ -1,18 +1,17 @@
 ﻿using RoR2;
 using R2API;
 using UnityEngine;
+using FirstLightMod.Modules.Unlocks;
 
 namespace FirstLightMod.Content.Achievements
 {
-    public class FarmerUnlockAchievement : Modules.GenericModdedUnlockable
+    public class FarmerUnlockAchievement : GenericModdedUnlockable
     {
         public override string AchievementTokenPrefix => FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_MASTERY";
 
         public override string AchievementSpriteName => "texMasteryAchievement";
 
         public override string PrerequisiteUnlockableIdentifier => FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_UNLOCKABLE_REWARD_ID";
-
-
 
         public class FarmerUnlockAchievementServer : RoR2.Achievements.BaseServerAchievement
         {
