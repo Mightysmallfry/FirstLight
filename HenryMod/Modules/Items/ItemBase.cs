@@ -39,7 +39,8 @@ namespace FirstLightMod.Modules.Items
         public abstract string ItemLore { get; }
 
         public abstract ItemTier Tier { get; }
-        public virtual ItemTag[] ItemTags { get; } 
+
+        public virtual ItemTag[] ItemTags { get; } = { };
 
         public abstract GameObject ItemModel { get; }
         public abstract Sprite ItemIcon { get; }
@@ -47,9 +48,16 @@ namespace FirstLightMod.Modules.Items
         public virtual bool CanRemove { get; } = true;
         public virtual bool Hidden { get; } = false;
 
-        public ItemDef ItemDef;
+        public virtual UnlockableDef Unlockable { get; }
+
+        //creates necessary GameObject field for display rules
+        public static GameObject ItemBodyModelPrefab;
 
         public abstract void Init(ConfigFile config);
+
+        //Will create the instance of the item
+        public ItemDef ItemDef = ScriptableObject.CreateInstance<ItemDef>();
+
 
 
         protected void CreateLang()
@@ -78,9 +86,12 @@ namespace FirstLightMod.Modules.Items
             ItemDef.tags = ItemTags;
             ItemDef.deprecatedTier = Tier;
 
-
+            //Sets the display of the item on the character
             var itemDisplayRulesDict = CreateItemDisplayRules();
-            ItemAPI.Add(new CustomItem(ItemDef, itemDisplayRulesDict));
+
+            //Adds the item to a list that will be added in the game
+            //ItemAPI.Add(new CustomItem(ItemDef, itemDisplayRulesDict));
+            Modules.Content.AddItemDef(ItemDef);
         }
 
         public abstract void Hooks();

@@ -12,9 +12,12 @@ namespace FirstLightMod.Modules
         public static UnlockableDef farmerMasteryUnlockableDef;
 
 
+        public static UnlockableDef beekeeperUnlockableDef;
+
         public static void RegisterUnlockables()
         {
             farmerUnlockableDef = Config.forceFarmerUnlock.Value ? null : UnlockableAPI.AddUnlockable<FarmerUnlockAchievement>(typeof(FarmerUnlockAchievement.FarmerUnlockAchievementServer));
+            //farmerUnlockableDef = Config.forceFarmerUnlock.Value ? null : UnlockableAPI.AddUnlockable<FarmerUnlockAchievement>(typeof(FarmerUnlockAchievement.FarmerUnlockAchievementServer));
 
             // Why no worky game!? T-T
             //farmerMasteryUnlockableDef = Config.forceFarmerMasteryUnlock.Value ? null : UnlockableAPI.AddUnlockable<FarmerMasteryAchievement>();

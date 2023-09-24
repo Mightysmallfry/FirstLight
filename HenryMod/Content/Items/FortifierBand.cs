@@ -2,9 +2,7 @@
 using FirstLightMod.Modules.Items;
 using R2API;
 using RoR2;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using static FirstLightMod.Modules.Helpers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -17,11 +15,13 @@ namespace FirstLightMod.Content.Items
         public override string ItemPickupDescription => "Gain increased armor for each band acquired.";
         public override string ItemFullDescription => $"Gain <style=cShrine>{armorGain} armor</style>. Gain an additional <style=cShrine>{armorPerBand} armor</style> for each non {ItemName} item in your inventory.";
         public override string ItemLore => "";
-        public override ItemTier Tier => ItemTier.Tier2;
+        public override ItemTier Tier => ItemTier.Tier3;
+
 
         //Use Addressables not Resources as it is more up to date
         public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(); //use singularity band
         public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(); //use singularity band
+
 
 
         //More non-Fortifier bands = more armor
@@ -33,6 +33,7 @@ namespace FirstLightMod.Content.Items
         public override void Init(ConfigFile config)
         {
             CreateConfig(config);
+            CreateItemDisplayRules();
             CreateLang();
             CreateItem();
             Hooks();
@@ -62,17 +63,45 @@ namespace FirstLightMod.Content.Items
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
-            return new ItemDisplayRuleDict();
+            //ItemBodyModelPrefab = Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(ItemModelPath);
+            ItemBodyModelPrefab = ItemModel;
+            var itemDisplay = ItemBodyModelPrefab.AddComponent<ItemDisplay>();
+            itemDisplay.rendererInfos = ItemDisplaySetup(ItemBodyModelPrefab);
+
+            ItemDisplayRuleDict rules = new ItemDisplayRuleDict(new RoR2.ItemDisplayRule[]
+            {
+
+                new RoR2.ItemDisplayRule
+               {
+                    ruleType = ItemDisplayRuleType.ParentedPrefab,
+                    followerPrefab = ItemBodyModelPrefab,
+                    childName = "Chest",
+                    localPos = new Vector3(0, 0, 0),
+                    localAngles = new Vector3(0, 0, 0),
+                    localScale = new Vector3(1, 1, 1)
+                }
+
+            });
+
+            rules.Add("mdlHuntress", new RoR2.ItemDisplayRule[]
+            {
+                new RoR2.ItemDisplayRule
+                {
+                    ruleType = ItemDisplayRuleType.ParentedPrefab,
+                    followerPrefab = ItemBodyModelPrefab,
+                    childName = "Chest",
+                    localPos = new Vector3(0, 0, 0),
+                    localAngles = new Vector3(0, 0, 0),
+                    localScale = new Vector3(1, 1, 1)
+                }
+            });
+
+            return rules;
         }
 
         public override void Hooks()
         {
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateState;
-        }
-
-        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
-        {
-            throw new NotImplementedException();
         }
 
         private void CharacterBody_RecalculateState(On.RoR2.CharacterBody.orig_RecalculateStats orig, RoR2.CharacterBody self)
@@ -83,10 +112,7 @@ namespace FirstLightMod.Content.Items
             {
                 self.armor += armorGain;
 
-                if (GetCountBands(self) > 0)
-                {
-                    self.armor += GetCountBands(self) * (armorPerBand + (armorPerCopy * (GetCount(self) - 1)));
-                }
+                self.armor += GetCountBands(self) * (armorPerBand + (armorPerCopy * (GetCount(self) - 1)));
             }
         }
 

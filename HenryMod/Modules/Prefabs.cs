@@ -415,6 +415,7 @@ namespace FirstLightMod.Modules {
         }
 
         #endregion ComponentSetup
+
     }
 
     // for simplifying rendererinfo creation

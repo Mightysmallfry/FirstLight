@@ -14,6 +14,8 @@ namespace FirstLightMod.Modules
         public string identifier => FirstLightPlugin.MODUID;
 
         public static List<RoR2.ExpansionManagement.ExpansionDef> expansionDefs = new List<RoR2.ExpansionManagement.ExpansionDef>();
+        public static List<ItemDef> itemDefs = new List<ItemDef>();
+
 
         public static List<GameObject> bodyPrefabs = new List<GameObject>();
         public static List<GameObject> masterPrefabs = new List<GameObject>();
@@ -46,6 +48,7 @@ namespace FirstLightMod.Modules
             this.contentPack.identifier = this.identifier;
 
             contentPack.expansionDefs.Add(expansionDefs.ToArray());
+            contentPack.itemDefs.Add(itemDefs.ToArray());
 
             contentPack.bodyPrefabs.Add(bodyPrefabs.ToArray());
             contentPack.masterPrefabs.Add(masterPrefabs.ToArray());
@@ -87,6 +90,12 @@ namespace FirstLightMod.Modules
         {
             ContentPacks.expansionDefs.Add(expansionDef);
         }
+
+        public static void AddItemDef(ItemDef itemDef)
+        {
+            ContentPacks.itemDefs.Add(itemDef);
+        }
+
         public static void AddCharacterBodyPrefab(GameObject bprefab)
         {
 

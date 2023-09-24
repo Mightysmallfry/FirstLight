@@ -23,7 +23,7 @@ namespace FirstLightMod.Modules.Survivors
         //used when registering your survivor's language tokens
         public override string survivorTokenPrefix => FARMER_PREFIX;
 
-
+        #region SkillDefs
 
         //used when boosting skills to their "super" versions
         public static SkillDef shotgunSkillDef;
@@ -41,6 +41,8 @@ namespace FirstLightMod.Modules.Survivors
         public static SkillDef groveSkillDef;
         public static SkillDef superGroveSkillDef;
         public static SkillDef mortarSkillDef;
+
+        #endregion
 
         public override BodyInfo bodyInfo { get; set; } = new BodyInfo
         {
@@ -89,6 +91,7 @@ namespace FirstLightMod.Modules.Survivors
         public override void InitializeCharacter()
         {
             base.InitializeCharacter();
+            Modules.Tokens.AddFarmer(FARMER_PREFIX);
         }
 
         public override void InitializeUnlockables()
@@ -134,8 +137,6 @@ namespace FirstLightMod.Modules.Survivors
 
         private void InitializePassiveSkills(string prefix)
         {
-
-
             SkillLocator skillLocator = bodyPrefab.GetComponent<SkillLocator>();
 
             SkillDef arborPassive = Modules.Skills.CreateSkillDef(new SkillDefInfo
@@ -151,7 +152,6 @@ namespace FirstLightMod.Modules.Survivors
 
 
 
-
             SkillDef spartanPassive = Modules.Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillNameToken = FARMER_PREFIX + "ALT_PASSIVE_NAME",
@@ -161,11 +161,7 @@ namespace FirstLightMod.Modules.Survivors
                 isCombatSkill = false, 
              });
 
-
             Modules.Skills.AddPassiveSkills(bodyPrefab, spartanPassive);
-
-
-
         }
 
 

@@ -4,7 +4,7 @@ using R2API;
 using RoR2;
 using UnityEngine;
 using static FirstLightMod.FirstLightPlugin;
-using static FirstLightMod.Modules.Items.ItemHelper;
+using static FirstLightMod.Modules.Helpers;
 using UnityEngine.Networking;
 using System;
 using UnityEngine.AddressableAssets;
@@ -35,6 +35,7 @@ namespace FirstLightMod.Content.Items
         public override void Init(ConfigFile config)
         {
             CreateConfig(config);
+            CreateItemDisplayRules();
             CreateLang();
             CreateItem();
             Hooks();
@@ -68,38 +69,36 @@ namespace FirstLightMod.Content.Items
         
         public override ItemDisplayRuleDict CreateItemDisplayRules()
         {
-            //ItemBodyModelPrefab = ItemModel;
-            //var itemDisplay = ItemBodyModelPrefab.AddComponent<ItemDisplay>();
-            //itemDisplay.rendererInfos = ItemDisplaySetup(ItemBodyModelPrefab);
+            ItemBodyModelPrefab = ItemModel;
+            var itemDisplay = ItemBodyModelPrefab.AddComponent<ItemDisplay>();
+            itemDisplay.rendererInfos = ItemDisplaySetup(ItemBodyModelPrefab);
 
-            //ItemDisplayRuleDict rules = new ItemDisplayRuleDict(new RoR2.ItemDisplayRule[]
-            //{
-            //    new RoR2.ItemDisplayRule{
-            //        ruleType = ItemDisplayRuleType.ParentedPrefab,
-            //        followerPrefab = ItemBodyModelPrefab,
-            //        childName = "Chest",
-            //        localPos = new Vector3(0, 0, 0),
-            //        localAngles = new Vector3(0, 0, 0),
-            //        localScale = new Vector3(1, 1, 1)
-            //    }
-            //});
+            ItemDisplayRuleDict rules = new ItemDisplayRuleDict(new RoR2.ItemDisplayRule[]
+            {
+                new RoR2.ItemDisplayRule{
+                    ruleType = ItemDisplayRuleType.ParentedPrefab,
+                    followerPrefab = ItemBodyModelPrefab,
+                    childName = "Chest",
+                    localPos = new Vector3(0, 0, 0),
+                    localAngles = new Vector3(0, 0, 0),
+                    localScale = new Vector3(1, 1, 1)
+                }
+            });
 
-            //rules.Add("mdlHuntress", new RoR2.ItemDisplayRule[]
-            //{
-            //    new RoR2.ItemDisplayRule
-            //    {
-            //        ruleType = ItemDisplayRuleType.ParentedPrefab,
-            //        followerPrefab = ItemBodyModelPrefab,
-            //        childName = "Chest",
-            //        localPos = new Vector3(0, 0, 0),
-            //        localAngles = new Vector3(0, 0, 0),
-            //        localScale = new Vector3(1, 1, 1)
-            //    }
-            //});
+            rules.Add("mdlHuntress", new RoR2.ItemDisplayRule[]
+            {
+                new RoR2.ItemDisplayRule
+                {
+                    ruleType = ItemDisplayRuleType.ParentedPrefab,
+                    followerPrefab = ItemBodyModelPrefab,
+                    childName = "Chest",
+                    localPos = new Vector3(0, 0, 0),
+                    localAngles = new Vector3(0, 0, 0),
+                    localScale = new Vector3(1, 1, 1)
+                }
+            });
 
-            //return rules;
-
-            return new ItemDisplayRuleDict();
+            return rules;
         }
 
         public override void Hooks()

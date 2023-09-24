@@ -13,10 +13,15 @@ namespace FirstLightMod.Modules
         // Farmer's Passive
         public static BuffDef farmerPassive;
 
+        public static BuffDef MicrobotMatrixBuff;
+
         static string farmerPrefix = FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_";
+        static string beekeeperPrefix = FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_";
 
         internal static void RegisterBuffs()
         {
+            //Naming Convention, characterPassive, ItemBuff, EquipmentBuff
+
             armorBuff = AddNewBuff("HenryArmorBuff",
                 LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite, 
                 Color.white, 
@@ -28,6 +33,13 @@ namespace FirstLightMod.Modules
                 new Color(255f / 255f, 0f / 255f, 84f / 255f),
                 false,
                 false);
+
+            MicrobotMatrixBuff = AddNewBuff(FirstLightPlugin.DEVELOPER_PREFIX + "_MicrobotMatrixBuff",
+                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
+                Color.red,
+                true,
+                false);
+
 
         }
 

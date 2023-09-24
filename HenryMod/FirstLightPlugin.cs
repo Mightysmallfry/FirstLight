@@ -1,7 +1,6 @@
 ﻿using BepInEx;
 using FirstLightMod.Content.Items;
 using FirstLightMod.Modules;
-using FirstLightMod.Modules.Items;
 using FirstLightMod.Modules.Survivors;
 using R2API;
 using R2API.Utils;
@@ -43,13 +42,13 @@ namespace FirstLightMod
 
         public static FirstLightPlugin instance;
 
-        public KrisBlade KrisBlade;
+        //public KrisBlade KrisBlade;
         
         private void Awake()
         {
             mainConfig = Config;
             instance = this;
-            ItemHelper itemHelper = new ItemHelper(mainConfig);
+            Helpers helper = new Helpers(mainConfig);
 
             Log.Init(Logger);
             Modules.Assets.Initialize(); // load assets and read config
@@ -60,28 +59,46 @@ namespace FirstLightMod
             Modules.Tokens.AddTokens(); // register name tokens
             Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
 
-            KrisBlade = new KrisBlade();
 
-            KrisBlade.Init(mainConfig);
 
-            //  ---------------------------------------- UNLOCKABLES/ACHIEVEMENTS
+
+            //----------------------------------------------- UNLOCKABLES/ACHIEVEMENTS
             //Modules.FLUnlockables.RegisterUnlockables(); // Out of commission due to updating nuget
 
-            // survivor initialization
-            new FarmerCharacter().Initialize();
+            //----------------------------------------------- SURVIVORS
+
+            //Can't have them using the same prefab, make a copy and make sure to name them seperately then.
+
+            //new FarmerCharacter().Initialize();
+            new BeekeeperCharacter().Initialize();
+
+            //----------------------------------------------- ITEMS
 
             // Problem Occurs within loading the items
             // - See if this fixes it, separated the functions and gave it a proper configFile var
             // - It did not, something is wrong with loading the items
-            // - Current thoughts are ItemDef.Tier
-            //itemHelper.LoadAllItems();
+            // - Current thoughts: are getting help
+            //KrisBlade = new KrisBlade();
+            //KrisBlade.Init(mainConfig);
+
+            //Items have been fixed!!!!
+            helper.LoadAllItems();
+
+            //----------------------------------------------- HOOKS
+
+
+            Hooks(); // Hooks should be in the file that they are relevant to.
+
+            //----------------------------------------------- EXPANSION
 
             //Add the Expansion definition to the content Pack
             ApplyExpansion();
 
+
+            //----------------------------------------------- CONTENT PACKS
             // now make a content pack and add it- this part will change with the next update
             new Modules.ContentPacks().Initialize();
-            Hooks(); // Hooks should be in the file that they are relevant to.
+
 
         }
 
@@ -94,8 +111,15 @@ namespace FirstLightMod
                 var transform = PlayerCharacterMasterController.instances[0].master.GetBodyObject().transform;
 
                 // And then drop our defined item in front of the player.
-
                 Log.Info($"Player pressed F2. Spawning our custom item at coordinates {transform.position}");
+                //KrisBlade krisBlade = new KrisBlade(); // remember, it is singleton, must get the one from the content pack
+                //foreach (ItemDef itemDef in ContentPacks.itemDefs)
+                //{
+                //    PickupIndex index = itemDef.CreatePickupDef().pickupIndex;
+                //    index.value = 999;
+
+                //    PickupDropletController.CreatePickupDroplet(index, transform.position, transform.forward * 20f);
+                //}
             }
         }
 
@@ -109,13 +133,13 @@ namespace FirstLightMod
             expansionDef.nameToken = prefix + "FIRST_LIGHT_NAME";
             expansionDef.descriptionToken = prefix + "FIRST_LIGHT_DESC";
             //
-            expansionDef.iconSprite = Resources.Load<Sprite>("Textures/MiscIcons/texMysteryIcon");
+            expansionDef.iconSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion();
             expansionDef.disabledIconSprite = Addressables.LoadAssetAsync<Sprite>("3ec13f47b775f5d478c8a844fa28fdc0").WaitForCompletion();
 
             LanguageAPI.Add(expansionDef.nameToken, expansionDef.name);
             LanguageAPI.Add(expansionDef.descriptionToken, "Adds content from the '" + expansionDef.name + "' mod to the game.");
 
-            ContentPacks.expansionDefs.Add(expansionDef);
+            Modules.Content.AddExpansionDef(expansionDef);
         }
 
         private void Hooks()

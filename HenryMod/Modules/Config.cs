@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using HarmonyLib;
+using R2API.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,6 @@ namespace FirstLightMod.Modules
 
         private static ConfigEntry<string> modVersion;
 
-        private static string farmerPrefix = "FARM-R - ";
         private static string versionSuffix = " - " + FirstLightPlugin.MODVERSION;
         public static ConfigEntry<float> sortPosition;
 
@@ -20,10 +20,18 @@ namespace FirstLightMod.Modules
         public static ConfigEntry<bool> forceFarmerUnlock;
         //public static ConfigEntry<bool> forceFarmerMasteryUnlock;
 
+
+        private static string passiveSection;
+        private static string primarySection;
+        private static string secondarySection;
+        private static string utilitySection;
+        private static string specialSection;
+
+        //----------------------------------------------- FARM-R
+        private static string farmerPrefix = "FARM-R - ";
         #region Farmer
 
         #region Passive
-        private static string passiveSection = farmerPrefix + "Passive";
         public static ConfigEntry<float> farmerPassiveAttackSpeedCoefficient;
 
         public static ConfigEntry<float> farmerAltPassiveArmorPerLevel;
@@ -31,7 +39,6 @@ namespace FirstLightMod.Modules
         #endregion
 
         #region Primary
-        private static string primarySection = farmerPrefix + "Primary";
         public static ConfigEntry<float> shotgunDamageCoefficient;
         public static ConfigEntry<float> superShotgunDamageCoefficient;
 
@@ -46,7 +53,6 @@ namespace FirstLightMod.Modules
         #endregion
 
         #region Secondary 
-        private static string secondarySection = farmerPrefix + "Secondary";
 
         public static ConfigEntry<float> shovelDamageCoefficient;
         public static ConfigEntry<float> forkDamageCoefficient;
@@ -54,7 +60,6 @@ namespace FirstLightMod.Modules
         #endregion
 
         #region Utility
-        private static string utilitySection = farmerPrefix + "Utility";
 
         public static ConfigEntry<float> bungalHealingCoefficient;
         public static ConfigEntry<float> bungalAdditionalHealingCoefficient;
@@ -68,6 +73,27 @@ namespace FirstLightMod.Modules
         #endregion
 
         #endregion
+
+
+
+        //----------------------------------------------- Beekeeper
+        private static string keeperPrefix = "Beekeeper - ";
+
+
+
+        #region Beekeeper
+        public static ConfigEntry<float> assaultRifleDamageCoefficient;
+        public static ConfigEntry<float> jarRadius;
+
+        public static ConfigEntry<float> honeyHealPercentage;
+        public static ConfigEntry<float> beeDamageCoefficient;
+        public static ConfigEntry<float> hornetDamageCoefficient;
+
+
+
+        #endregion
+
+
 
         public static void ReadConfig(FirstLightPlugin plugin)
         {
@@ -85,6 +111,8 @@ namespace FirstLightMod.Modules
                 modVersion.Value = modVersion.DefaultValue.ToString();
             }
 
+            FarmerConfig(plugin);
+            BeekeeperConfig(plugin);
 
             #region Character Unlocks
 
@@ -94,6 +122,23 @@ namespace FirstLightMod.Modules
 
 
             #endregion
+
+
+
+        }
+
+        internal static void ReconfigureSections(string prefix)
+        {
+            passiveSection = prefix + "Passive";
+            primarySection = prefix + "Primary";
+            secondarySection = prefix + "Secondary";
+            utilitySection = prefix + "Utility";
+            specialSection = prefix + "Special";
+        }
+
+        internal static void FarmerConfig(FirstLightPlugin plugin)
+        {
+            ReconfigureSections(farmerPrefix);
 
             #region FARM-R
 
@@ -142,6 +187,22 @@ namespace FirstLightMod.Modules
 
 
             #endregion
+        }
+
+
+        internal static void BeekeeperConfig(FirstLightPlugin plugin)
+        {
+            ReconfigureSections(keeperPrefix);
+
+            assaultRifleDamageCoefficient = plugin.Config.Bind<float>(primarySection, "Assault Rifle Damage Coefficient", 1.0f, "Damage coefficient is multiplied by 100 to calculate base damage.");
+
+            jarRadius = plugin.Config.Bind<float>(secondarySection, "Jar Radius", 25.0f, "What is the radius of beekeeper's jar abiltieis. Note: this affects both jar abilities.");
+
+            honeyHealPercentage = plugin.Config.Bind<float>(utilitySection, "HON-Y Heal Percentage", 10.0f, "What is the percentage of beekeeper's hit points that will be healed by Natural Medicine");
+
+            beeDamageCoefficient = plugin.Config.Bind<float>(specialSection, "Bee Damage Coefficient", 2.0f, "Damage coefficient of bee bullets");
+            hornetDamageCoefficient = plugin.Config.Bind<float>(specialSection, "Hornet Damage Coefficient", 10.0f, "Damage coefficient for damage per tick of the Hornet Laser");
+
         }
 
         // this helper automatically makes config entries for disabling survivors

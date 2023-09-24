@@ -1,19 +1,22 @@
 ﻿using RoR2;
-using FirstLightMod.Modules.Items;
+using FirstLightMod.Modules.Equipment;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using R2API;
 using BepInEx.Configuration;
+using FirstLightMod.Modules;
+using static RoR2.MasterSpawnSlotController;
 
 namespace FirstLightMod.Content.Equipment
 {
-    public class MicrobotMatrix : EquipmentBase
+    public class MicrobotMatrix : EquipmentBase<MicrobotMatrix>
     {
         public override string EquipmentName => "Microbot Matrix";
 
-        public override string EquipmentNameToken => "MICROBOT_MATRIX";
+        public override string EquipmentLangTokenName => "MICROBOT_MATRIX";
 
         public override string EquipmentPickupDesc => "Create a swarm of temporary Defense Microbots to defend you";
 
@@ -21,16 +24,38 @@ namespace FirstLightMod.Content.Equipment
 
         public override string EquipmentLore => "";
 
-        public override GameObject EquipmentModel => throw new NotImplementedException(); //Use fuel Array
+        public override GameObject EquipmentModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(); //Use fuel Array
 
-        public override Sprite EquipmentIcon => throw new NotImplementedException(); //Use fuel Array
+        public override Sprite EquipmentIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(); //Use fuel Array
 
 
-        public int microCount; //How many microbots
+
+        ///<summary>
+        /// The number of items that this equipment gives
+        ///</summary>
+        public int microCount; 
+
+        ///<summary>
+        /// The amount of items that the captain specific interaction saves
+        ///</summary>
         public int captainSave; //How many does the captain get to save?
-        public float duration; //How long should these remain on the field
 
-        public float age; //How long has the microbots been on the field
+
+        ///<summary>
+        /// The duration that the items remain with the player
+        ///</summary>
+        public float buffDuration;
+
+        ///<summary>
+        /// The Item given by this equipment
+        ///</summary>
+        ItemDef itemDef = RoR2Content.Items.CaptainDefenseMatrix;
+
+
+        /// <summary>
+        /// The buff used to track when the duration ends
+        /// </summary>
+        BuffDef matrixBuff = Buffs.MicrobotMatrixBuff;
 
 
         public override ItemDisplayRuleDict CreateItemDisplayRules()
@@ -38,22 +63,17 @@ namespace FirstLightMod.Content.Equipment
             return new ItemDisplayRuleDict();
         }
 
-        public override void Hooks()
-        {
-            //Shouldn't need any hooks
-        }
-
         public override void Init(ConfigFile config)
         {
 
-            //CreateConfig(config);
-            //CreateLang();
-            //CreateEquipment();
-            //Hooks();
+            CreateConfig(config);
+            CreateLang();
+            CreateEquipment();
+            Hooks();
 
         }
 
-        private void CreateConfig(ConfigFile config)
+        protected override void CreateConfig(ConfigFile config)
         {
 
             microCount = config.Bind<int>(
@@ -68,43 +88,52 @@ namespace FirstLightMod.Content.Equipment
                 1,
                 "How many Defense Microbots does Captain get to save?").Value;
 
-            duration = config.Bind<float>(
+            buffDuration = config.Bind<float>(
                 "Equipment: " + EquipmentName,
                 "Duration",
                 15f,
-                "How long will the Defense Microbots last once activated?").Value;
+                "How long will the Defense Microbots last, once activated?").Value;
         }
 
         protected override bool ActivateEquipment(EquipmentSlot equipmentSlot)
         {
             if (!equipmentSlot.characterBody) { return false; } // Check to see if you have a character body
             if (!equipmentSlot.characterBody.inventory) { return false; } // Make sure that body has an inventory
-                                                                          //var body = equipmentSlot.characterBody;
-                                                                          //int removeCount = microCount;
-                                                                          ////Add the items to the inventory
-                                                                          //body.inventory.GiveItem(RoR2Content.Items.CaptainDefenseMatrix, microCount);
 
-            //SurvivorDef survivorDef;
-            ////Start a stopwatch
 
-            ////Once stopwatch is complete, check characterbody to see if it is Captain
-
-            //if (survivorDef == RoR2Content.Survivors.Captain)
-            //{
-            //    removeCount = microCount - captainSave;
-            //}
-
-            //for ()
-            //{
-
-            //    body.inventory.RemoveItem(RoR2Content.Items.CaptainDefenseMatrix, 1);
-
-            //}
-
-            //Remove Appropriate amount of Microbots
-
+            
+            //Give Items
+            equipmentSlot.characterBody.inventory.GiveItem(itemDef, microCount);
+            //Start Timer
+            equipmentSlot.characterBody.AddTimedBuff(matrixBuff, buffDuration);
+            //Notify Player
+            Util.PlaySound("Play_item_proc_healingPotion", equipmentSlot.gameObject);
             return true;
 
+        }
+        public override void Hooks()
+        {
+            On.RoR2.CharacterBody.RemoveBuff_BuffDef += CharacterBody_RemoveBuff_BuffDef;
+        }
+
+        private void CharacterBody_RemoveBuff_BuffDef(On.RoR2.CharacterBody.orig_RemoveBuff_BuffDef orig, CharacterBody self, BuffDef buffDef)
+        {
+            //This might work, double check removal but otherwise should be good.
+
+            if (buffDef == matrixBuff)
+            {
+                //Remove Items
+                if (self.bodyIndex == SurvivorCatalog.GetBodyIndexFromSurvivorIndex(RoR2Content.Survivors.Captain.survivorIndex))
+                {
+                    self.inventory.RemoveItem(itemDef, microCount);
+                }
+                else
+                {
+                    self.inventory.RemoveItem(itemDef, microCount - captainSave);
+                }
+            }
+
+            orig(self, buffDef);
         }
     }
 }
