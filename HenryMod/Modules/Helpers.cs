@@ -7,6 +7,8 @@ using FirstLightMod.Modules.Equipment;
 using FirstLightMod.Modules.Equipment.EliteEquipment;
 using FirstLightMod.Modules.Items;
 using System;
+using FirstLightMod.Modules.Artifact;
+using static RoR2.RoR2Content;
 
 namespace FirstLightMod.Modules
 {
@@ -18,12 +20,19 @@ namespace FirstLightMod.Modules
         public static List<ItemBase> Items = new List<ItemBase>();
         public static List<EquipmentBase> Equipments = new List<EquipmentBase>();
         public static List<EliteEquipmentBase> EliteEquipments = new List<EliteEquipmentBase>();
+        public static List<ArtifactBase> Artifacts = new List<ArtifactBase>();
         private BepInEx.Configuration.ConfigFile config;
 
         public Helpers(BepInEx.Configuration.ConfigFile config)
         {
             this.config = config;
         }
+
+
+
+        //----------------------------------------------- General Helpers
+
+
 
         internal const string agilePrefix = "<style=cIsUtility>Agile.</style> ";
 
@@ -43,9 +52,47 @@ namespace FirstLightMod.Modules
 
         public static Func<T[], T[]> AppendDel<T>(List<T> list) => (r) => Append(ref r, list);
 
-        public void LoadAllItems()
+        public static CharacterModel.RendererInfo[] ItemDisplaySetup(GameObject obj)
         {
+            MeshRenderer[] meshes = obj.GetComponentsInChildren<MeshRenderer>();
+            CharacterModel.RendererInfo[] renderInfos = new CharacterModel.RendererInfo[meshes.Length];
 
+            for (int i = 0; i < meshes.Length; i++)
+            {
+                renderInfos[i] = new CharacterModel.RendererInfo
+                {
+                    defaultMaterial = meshes[i].material,
+                    renderer = meshes[i],
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = false //We allow the mesh to be affected by overlays like OnFire or PredatoryInstinctsCritOverlay.
+                };
+            }
+
+            return renderInfos;
+        }
+
+
+
+
+
+
+
+        //----------------------------------------------- Loading and Initialization Helpers
+
+
+
+
+        public void LoadAll()
+        {
+            LoadItems();
+            LoadEquipment();
+            LoadEliteEquipment();
+            LoadArtifacts();
+        }
+
+
+        public void LoadItems()
+        {
             //This section automatically scans the project for all items
             var ItemTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(ItemBase)));
 
@@ -57,7 +104,10 @@ namespace FirstLightMod.Modules
                     item.Init(config);
                 }
             }
+        }
 
+        public void LoadEquipment()
+        {
             //this section automatically scans the project for all equipment
             var EquipmentTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(EquipmentBase)));
 
@@ -69,7 +119,10 @@ namespace FirstLightMod.Modules
                     equipment.Init(config);
                 }
             }
+        }
 
+        public void LoadEliteEquipment()
+        {
             //this section automatically scans the project for all elite equipment
             var EliteEquipmentTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(EliteEquipmentBase)));
 
@@ -84,7 +137,24 @@ namespace FirstLightMod.Modules
             }
         }
 
+        public void LoadArtifacts()
+        {
+            //This section automatically scans the project for all artifacts
+            var ArtifactTypes = Assembly.GetExecutingAssembly().GetTypes().Where(type => !type.IsAbstract && type.IsSubclassOf(typeof(ArtifactBase)));
 
+            foreach (var artifactType in ArtifactTypes)
+            {
+                ArtifactBase artifact = (ArtifactBase)Activator.CreateInstance(artifactType);
+                if (ValidateArtifact(artifact, Artifacts))
+                {
+                    artifact.Init(config);
+                }
+            }
+        }
+
+
+
+        //----------------------------------------------- Validators
 
         /// <summary>
         /// A helper to easily set up and initialize an item from your item classes if the user has it enabled in their configuration files.
@@ -134,23 +204,21 @@ namespace FirstLightMod.Modules
             return false;
         }
 
-        public static CharacterModel.RendererInfo[] ItemDisplaySetup(GameObject obj)
+        /// <summary>
+        /// A helper to easily set up and initialize an artifact from your artifact classes if the user has it enabled in their configuration files.
+        /// </summary>
+        /// <param name="artifact">A new instance of an ArtifactBase class."</param>
+        /// <param name="artifactList">The list you would like to add this to if it passes the config check.</param>
+        public bool ValidateArtifact(ArtifactBase artifact, List<ArtifactBase> artifactList)
         {
-            MeshRenderer[] meshes = obj.GetComponentsInChildren<MeshRenderer>();
-            CharacterModel.RendererInfo[] renderInfos = new CharacterModel.RendererInfo[meshes.Length];
+            var enabled = config.Bind<bool>("Artifact: " + artifact.ArtifactName, "Enable Artifact?", true, "Should this artifact appear for selection?").Value;
 
-            for (int i = 0; i < meshes.Length; i++)
+            if (enabled)
             {
-                renderInfos[i] = new CharacterModel.RendererInfo
-                {
-                    defaultMaterial = meshes[i].material,
-                    renderer = meshes[i],
-                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
-                    ignoreOverlays = false //We allow the mesh to be affected by overlays like OnFire or PredatoryInstinctsCritOverlay.
-                };
+                artifactList.Add(artifact);
             }
-
-            return renderInfos;
+            return enabled;
         }
+
     }
 }

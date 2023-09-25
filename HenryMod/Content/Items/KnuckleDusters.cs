@@ -13,14 +13,14 @@ namespace FirstLightMod.Content.Items
         public override string ItemName => "Knuckled Dusters";
         public override string ItemNameToken => "KNUCKLE_DUSTERS";
         public override string ItemPickupDescription => "Gain increased crit damage for with each knuckle.";
-        public override string ItemFullDescription => $"Gain <style=cIsDamage>{critDamageGainPercentage} Critical Damage</style> with each knuckle duster acquired.";
+        public override string ItemFullDescription => $"Gain <style=cIsDamage>{critDamageGainPercentage}% Critical Damage</style> with each knuckle duster acquired.";
         public override string ItemLore => "";
         public override ItemTier Tier => ItemTier.Tier1;
 
 
         //Use Addressables not Resources as it is more up to date
-        public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(); 
-        public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(); 
+        public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Thorns/PickupRazorwire.prefab").WaitForCompletion(); 
+        public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Thorns/texRazorwireIcon.png").WaitForCompletion(); 
 
 
 

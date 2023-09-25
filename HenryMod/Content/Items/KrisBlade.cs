@@ -16,13 +16,13 @@ namespace FirstLightMod.Content.Items
         public override string ItemName => "Kris Blade";
         public override string ItemNameToken => "KRIS_BLADE";
         public override string ItemPickupDescription => "Deal massively increased bleed damage";
-        public override string ItemFullDescription => $"Gain {initialBleedChance}% bleed chance, all bleed damage is also increased by <style=cIsDamage>{100f* InitialBleedPercentage}</style>, this percentage is increased by <style=cStack>(+{100f * AdditionalBleedPercentage}) per additional item.";
+        public override string ItemFullDescription => $"Gain {initialBleedChance}% bleed chance, all bleed damage is also increased by <style=cIsDamage>{100f* InitialBleedPercentage}%</style>, this percentage is increased by <style=cStack>(+{100f * AdditionalBleedPercentage}%) per additional item.";
         public override string ItemLore => "A finely made blade that retains its edge. Viscera beware.";
         public override ItemTier Tier => ItemTier.Tier3;
 
         //public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage }; // I can uncomment this once I figure out what is happening with the load issue
-        public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(); //Again tri-tip dagger
-        public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(); //Could use tri-tip dagger for now
+        public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/BleedOnHit/PickupTriTip.prefab").WaitForCompletion(); //Again tri-tip dagger
+        public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/BleedOnHit/texTriTipIcon.png").WaitForCompletion(); //Could use tri-tip dagger for now
 
         //public static GameObject ItemBodyModelPrefab;
 

@@ -1,9 +1,9 @@
 ﻿using EntityStates;
-using FirstLightMod.Modules.Survivors;
 using RoR2;
 using RoR2.Skills;
 using RoR2.Projectile;
 using UnityEngine;
+using FirstLightMod.Content;
 
 namespace FirstLightMod.SkillStates
 {

@@ -1,14 +1,17 @@
 ﻿using BepInEx;
-using FirstLightMod.Content.Items;
-using FirstLightMod.Modules;
-using FirstLightMod.Modules.Survivors;
 using R2API;
 using R2API.Utils;
 using RoR2;
+using System;
+using System.Reflection;
 using System.Security;
 using System.Security.Permissions;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using FirstLightMod.Content;
+using FirstLightMod.Modules;
+using FirstLightMod.Modules.Items;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -43,7 +46,7 @@ namespace FirstLightMod
         public static FirstLightPlugin instance;
 
         //public KrisBlade KrisBlade;
-        
+
         private void Awake()
         {
             mainConfig = Config;
@@ -82,7 +85,7 @@ namespace FirstLightMod
             //KrisBlade.Init(mainConfig);
 
             //Items have been fixed!!!!
-            helper.LoadAllItems();
+            helper.LoadAll();
 
             //----------------------------------------------- HOOKS
 
@@ -99,6 +102,8 @@ namespace FirstLightMod
             // now make a content pack and add it- this part will change with the next update
             new Modules.ContentPacks().Initialize();
 
+            //----------------------------------------------- CONSOLE COMMANDS
+            R2API.Utils.CommandHelper.AddToConsoleWhenReady();
 
         }
 
@@ -133,7 +138,7 @@ namespace FirstLightMod
             expansionDef.nameToken = prefix + "FIRST_LIGHT_NAME";
             expansionDef.descriptionToken = prefix + "FIRST_LIGHT_DESC";
             //
-            expansionDef.iconSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion();
+            expansionDef.iconSprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texWIPIcon.png").WaitForCompletion();
             expansionDef.disabledIconSprite = Addressables.LoadAssetAsync<Sprite>("3ec13f47b775f5d478c8a844fa28fdc0").WaitForCompletion();
 
             LanguageAPI.Add(expansionDef.nameToken, expansionDef.name);
@@ -149,9 +154,34 @@ namespace FirstLightMod
             // run hooks here, disabling one is as simple as commenting out the line
             // Make sure to place hooks where they are relevant
 
-            
+
         }
 
-       
+        /// <summary>
+        /// Gives one of each item from the FirsLight Mod to the player
+        /// </summary>
+        /// <param name="args"></param> 
+        [ConCommand(commandName = "FLP_GiveAllItems", flags = ConVarFlags.None, helpText = "Gives one of each item from the FirstLight Mod to the player. args\\[0\\]=(int)value) ]")]
+        private static void GiveModdedItems(ConCommandArgs args)
+        {
+            try
+            {
+                //This works but ideally change this to work with multiplayer and character indices in the future
+                CharacterBody characterBody = args.TryGetSenderBody();
+
+                //I want this loop to give the item by accessing each items instance
+                foreach (ItemDef itemDef in ContentPacks.itemDefs)
+                {
+                    characterBody.inventory.GiveItem(itemDef);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex);
+            }
+        }
+
     }
+
 }

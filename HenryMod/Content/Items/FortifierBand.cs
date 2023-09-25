@@ -19,8 +19,8 @@ namespace FirstLightMod.Content.Items
 
 
         //Use Addressables not Resources as it is more up to date
-        public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(); //use singularity band
-        public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(); //use singularity band
+        public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/ElementalRingVoid/PickupVoidRing.prefab").WaitForCompletion(); //use singularity band
+        public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ElementalRingVoid/texVoidRingIcon.png").WaitForCompletion(); //use singularity band
 
 
 
@@ -44,7 +44,7 @@ namespace FirstLightMod.Content.Items
             armorGain = config.Bind<float>(
                 "Item: " + ItemName,
                 "Armor Gained",
-                20f,
+                25f,
                 "What is the armor gained for having at least one copy of this item").Value;
 
             armorPerBand = config.Bind<float>(

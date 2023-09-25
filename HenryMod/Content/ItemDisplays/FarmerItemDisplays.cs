@@ -1,4 +1,6 @@
-﻿using RoR2;
+﻿using FirstLightMod.Modules;
+using FirstLightMod.Modules.Characters;
+using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
 

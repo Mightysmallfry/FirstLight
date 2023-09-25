@@ -1,5 +1,7 @@
 ﻿using BepInEx.Configuration;
+using FirstLightMod.Modules;
 using FirstLightMod.Modules.Characters;
+using FirstLightMod.Modules.Survivors;
 using FirstLightMod.SkillStates.Beekeeper;
 using RoR2;
 using RoR2.Skills;
@@ -9,7 +11,7 @@ using UnityEngine;
 
 
 
-namespace FirstLightMod.Modules.Survivors
+namespace FirstLightMod.Content
 {
     internal class BeekeeperCharacter : SurvivorBase
     {
@@ -42,8 +44,8 @@ namespace FirstLightMod.Modules.Survivors
             characterPortrait = Assets.mainAssetBundle.LoadAsset<Texture>("texHenryIcon"),
             bodyColor = Color.yellow,
 
-            crosshair = Modules.Assets.LoadCrosshair("Standard"),
-            podPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
+            crosshair = Assets.LoadCrosshair("Standard"),
+            podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
             maxHealth = 110f,
             healthRegen = 1.5f,
@@ -77,12 +79,12 @@ namespace FirstLightMod.Modules.Survivors
         public override void InitializeCharacter()
         {
             base.InitializeCharacter();
-            Modules.Tokens.AddBeekeeper(BEEKEEPER_PREFIX);
+            Tokens.AddBeekeeper(BEEKEEPER_PREFIX);
         }
 
         public override void InitializeSkills()
         {
-            Modules.Skills.CreateSkillFamilies(bodyPrefab);
+            Skills.CreateSkillFamilies(bodyPrefab);
             string prefix = FirstLightPlugin.DEVELOPER_PREFIX;
 
             InitializePassiveSkills(prefix);
@@ -94,50 +96,50 @@ namespace FirstLightMod.Modules.Survivors
 
         private void InitializePassiveSkills(string prefix)
         {
-            SkillDef suppressiveFirePassive = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef suppressiveFirePassive = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillNameToken = BEEKEEPER_PREFIX + "PASSIVE_NAME",
                 skillDescriptionToken = BEEKEEPER_PREFIX + "PASSIVE_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPassiveIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texPassiveIcon"),
                 activationStateMachineName = "Body",
                 isCombatSkill = false,
             });
 
-            Modules.Skills.AddPassiveSkills(bodyPrefab, suppressiveFirePassive);
+            Skills.AddPassiveSkills(bodyPrefab, suppressiveFirePassive);
         }
 
         private void InitializePrimarySkills(string prefix)
         {
-            assaultRifeDef = Modules.Skills.CreateSkillDef(new SkillDefInfo(
+            assaultRifeDef = Skills.CreateSkillDef(new SkillDefInfo(
                 prefix + "_HENRY_BODY_PRIMARY_RIFLE_NAME",
                 prefix + "_HENRY_BODY_PRIMARY_RIFLE_DESCRIPTION",
-                Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUziIcon"),
+                Assets.mainAssetBundle.LoadAsset<Sprite>("texUziIcon"),
                 new EntityStates.SerializableEntityStateType(typeof(AssaultRifle)), //change to AssaultRifle skill state
                 "Weapon",
                 true));
 
-            Modules.Skills.AddPrimarySkills(bodyPrefab, assaultRifeDef);
+            Skills.AddPrimarySkills(bodyPrefab, assaultRifeDef);
         }
         private void InitializeSecondarySkills(string prefix)
         {
-            targetJarDef = Modules.Skills.CreateSkillDef(new SkillDefInfo(
+            targetJarDef = Skills.CreateSkillDef(new SkillDefInfo(
                 prefix + "_HENRY_BODY_SECONDARY_TARGET_JAR_NAME",
                 prefix + "_HENRY_BODY_SECONDARY_TARGET_JAR_DESCRIPTION",
-                Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBazookaFireIcon"),
+                Assets.mainAssetBundle.LoadAsset<Sprite>("texBazookaFireIcon"),
                 new EntityStates.SerializableEntityStateType(typeof(TargetJar)), //change to AssaultRifle skill state
                 "Weapon",
                 true));
 
-            Modules.Skills.AddSecondarySkills(bodyPrefab, targetJarDef);
+            Skills.AddSecondarySkills(bodyPrefab, targetJarDef);
         }
         private void InitializeUtilitySkills(string prefix)
         {
-            honeyHealDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            honeyHealDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_UTILITY_HEAL_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_UTILITY_HEAL_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_UTILITY_HEAL_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(HoneyHeal)), //Replace type with HoneyHeal class
                 activationStateMachineName = "Weapon",
                 baseMaxStock = 1,
@@ -156,18 +158,18 @@ namespace FirstLightMod.Modules.Survivors
                 stockToConsume = 1,
             });
 
-            Modules.Skills.AddUtilitySkills(bodyPrefab, honeyHealDef);
+            Skills.AddUtilitySkills(bodyPrefab, honeyHealDef);
 
         }
         private void InitializeSpecialSkills(string prefix)
         {
-            beeDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            beeDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SPECIAL_BEE_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_SPECIAL_BEE_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SPECIAL_BEE_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBazookaIconScepter"),
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SummonBee)), 
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texBazookaIconScepter"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SummonBee)),
                 activationStateMachineName = "Weapon",
                 baseMaxStock = 4,
                 baseRechargeInterval = 1f,
@@ -185,15 +187,15 @@ namespace FirstLightMod.Modules.Survivors
                 stockToConsume = 1,
             });
 
-            Modules.Skills.AddSpecialSkills(bodyPrefab, beeDef);
+            Skills.AddSpecialSkills(bodyPrefab, beeDef);
 
-            hornetDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            hornetDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SPECIAL_HORNET_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_SPECIAL_HORNET_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SPECIAL_HORNET_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texBazookaIconScepter"),
-                activationState = new EntityStates.SerializableEntityStateType(typeof(SummonHornet)), 
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texBazookaIconScepter"),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(SummonHornet)),
                 activationStateMachineName = "Weapon",
                 baseMaxStock = 2,
                 baseRechargeInterval = .2f,
@@ -211,7 +213,7 @@ namespace FirstLightMod.Modules.Survivors
                 stockToConsume = 1,
             });
 
-            Modules.Skills.AddSpecialSkills(bodyPrefab, hornetDef);
+            Skills.AddSpecialSkills(bodyPrefab, hornetDef);
 
         }
 
@@ -227,14 +229,14 @@ namespace FirstLightMod.Modules.Survivors
 
             #region DefaultSkin
             //this creates a SkinDef with all default fields
-            SkinDef defaultSkin = Modules.Skins.CreateSkinDef(BEEKEEPER_PREFIX + "DEFAULT_SKIN_NAME",
+            SkinDef defaultSkin = Skins.CreateSkinDef(BEEKEEPER_PREFIX + "DEFAULT_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
 
             //these are your Mesh Replacements. The order here is based on your CustomRendererInfos from earlier
             //pass in meshes as they are named in your assetbundle
-            defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(defaultRendererinfos,
+            defaultSkin.meshReplacements = Skins.getMeshReplacements(defaultRendererinfos,
                 "meshHenrySword",
                 "meshUzi",
                 "meshHenry");

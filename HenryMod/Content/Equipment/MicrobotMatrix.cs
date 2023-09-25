@@ -14,7 +14,7 @@ namespace FirstLightMod.Content.Equipment
 {
     public class MicrobotMatrix : EquipmentBase<MicrobotMatrix>
     {
-        public override string EquipmentName => "Microbot Matrix";
+        public override string EquipmentName => "Microbot Defense Array";
 
         public override string EquipmentLangTokenName => "MICROBOT_MATRIX";
 
@@ -24,9 +24,9 @@ namespace FirstLightMod.Content.Equipment
 
         public override string EquipmentLore => "";
 
-        public override GameObject EquipmentModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mystery/PickupMystery.prefab").WaitForCompletion(); //Use fuel Array
+        public override GameObject EquipmentModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/QuestVolatileBattery/PickupBatteryArray.prefab").WaitForCompletion(); //Use fuel Array
 
-        public override Sprite EquipmentIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texMysteryIcon.png").WaitForCompletion(); //Use fuel Array
+        public override Sprite EquipmentIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/QuestVolatileBattery/texBatteryArrayIcon.png").WaitForCompletion(); //Use fuel Array
 
 
 
@@ -42,7 +42,7 @@ namespace FirstLightMod.Content.Equipment
 
 
         ///<summary>
-        /// The duration that the items remain with the player
+        /// The duration that the items remain with the player in seconds
         ///</summary>
         public float buffDuration;
 
@@ -92,7 +92,7 @@ namespace FirstLightMod.Content.Equipment
                 "Equipment: " + EquipmentName,
                 "Duration",
                 15f,
-                "How long will the Defense Microbots last, once activated?").Value;
+                "How long will the Defense Microbots last, once activated? Counted in seconds.").Value;
         }
 
         protected override bool ActivateEquipment(EquipmentSlot equipmentSlot)
@@ -123,7 +123,7 @@ namespace FirstLightMod.Content.Equipment
             if (buffDef == matrixBuff)
             {
                 //Remove Items
-                if (self.bodyIndex == SurvivorCatalog.GetBodyIndexFromSurvivorIndex(RoR2Content.Survivors.Captain.survivorIndex))
+                if (!(self.bodyIndex == SurvivorCatalog.GetBodyIndexFromSurvivorIndex(RoR2Content.Survivors.Captain.survivorIndex)))
                 {
                     self.inventory.RemoveItem(itemDef, microCount);
                 }

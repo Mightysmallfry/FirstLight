@@ -1,6 +1,8 @@
-﻿using RoR2;
+﻿using FirstLightMod.Modules.Characters;
+using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 namespace FirstLightMod.Modules.Characters
 {

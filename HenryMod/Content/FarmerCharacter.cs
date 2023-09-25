@@ -1,5 +1,7 @@
 ﻿using BepInEx.Configuration;
+using FirstLightMod.Modules;
 using FirstLightMod.Modules.Characters;
+using FirstLightMod.Modules.Survivors;
 using FirstLightMod.SkillStates.Farmer;
 using On.EntityStates.CaptainSupplyDrop;
 using RoR2;
@@ -10,7 +12,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using static RoR2.SkillLocator;
 
-namespace FirstLightMod.Modules.Survivors
+namespace FirstLightMod.Content
 {
     internal class FarmerCharacter : SurvivorBase
     {
@@ -53,8 +55,8 @@ namespace FirstLightMod.Modules.Survivors
             characterPortrait = Assets.mainAssetBundle.LoadAsset<Texture>("texHenryIcon"),
             bodyColor = Color.green,
 
-            crosshair = Modules.Assets.LoadCrosshair("Standard"),
-            podPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
+            crosshair = Assets.LoadCrosshair("Standard"),
+            podPrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 
             maxHealth = 110f,
             healthRegen = 1.5f,
@@ -62,7 +64,7 @@ namespace FirstLightMod.Modules.Survivors
             jumpCount = 1,
         };
 
-        public override CustomRendererInfo[] customRendererInfos { get; set; } = new CustomRendererInfo[] 
+        public override CustomRendererInfo[] customRendererInfos { get; set; } = new CustomRendererInfo[]
         {
                 new CustomRendererInfo
                 {
@@ -91,7 +93,7 @@ namespace FirstLightMod.Modules.Survivors
         public override void InitializeCharacter()
         {
             base.InitializeCharacter();
-            Modules.Tokens.AddFarmer(FARMER_PREFIX);
+            Tokens.AddFarmer(FARMER_PREFIX);
         }
 
         public override void InitializeUnlockables()
@@ -112,7 +114,7 @@ namespace FirstLightMod.Modules.Survivors
 
         public override void InitializeSkills()
         {
-            Modules.Skills.CreateSkillFamilies(bodyPrefab);
+            Skills.CreateSkillFamilies(bodyPrefab);
             string prefix = FirstLightPlugin.DEVELOPER_PREFIX;
 
             InitializePassiveSkills(prefix);
@@ -139,29 +141,29 @@ namespace FirstLightMod.Modules.Survivors
         {
             SkillLocator skillLocator = bodyPrefab.GetComponent<SkillLocator>();
 
-            SkillDef arborPassive = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef arborPassive = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillNameToken = FARMER_PREFIX + "PASSIVE_NAME",
                 skillDescriptionToken = FARMER_PREFIX + "PASSIVE_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
                 activationStateMachineName = "Body",
                 isCombatSkill = false,
             });
 
-            Modules.Skills.AddPassiveSkills(bodyPrefab, arborPassive);
+            Skills.AddPassiveSkills(bodyPrefab, arborPassive);
 
 
 
-            SkillDef spartanPassive = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef spartanPassive = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillNameToken = FARMER_PREFIX + "ALT_PASSIVE_NAME",
                 skillDescriptionToken = FARMER_PREFIX + "ALT_PASSIVE_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
                 activationStateMachineName = "Body",
-                isCombatSkill = false, 
-             });
+                isCombatSkill = false,
+            });
 
-            Modules.Skills.AddPassiveSkills(bodyPrefab, spartanPassive);
+            Skills.AddPassiveSkills(bodyPrefab, spartanPassive);
         }
 
 
@@ -188,21 +190,21 @@ namespace FirstLightMod.Modules.Survivors
             #region SeedShotgun
 
 
-            shotgunSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo(
+            shotgunSkillDef = Skills.CreateSkillDef(new SkillDefInfo(
                 prefix + "_HENRY_BODY_PRIMARY_SHOTGUN_NAME",
                 prefix + "_HENRY_BODY_PRIMARY_SHOTGUN_DESCRIPTION",
-                Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
                 new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shotgun)),
                 "Weapon",
                 true));
 
-            Modules.Skills.AddPrimarySkills(bodyPrefab, shotgunSkillDef);
+            Skills.AddPrimarySkills(bodyPrefab, shotgunSkillDef);
 
 
-            superShotgunSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo(
+            superShotgunSkillDef = Skills.CreateSkillDef(new SkillDefInfo(
                 prefix + "_HENRY_BODY_PRIMARY_SUPER_SHOTGUN_NAME",
                 prefix + "_HENRY_BODY_PRIMARY_SUPER_SHOTGUN_DESCRIPTION",
-                Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
                 new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shotgun)),
                 "Weapon",
                 true));
@@ -214,12 +216,12 @@ namespace FirstLightMod.Modules.Survivors
 
             #region SpudLauncher
 
-            cannonSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            cannonSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_PRIMARY_CANNON_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_PRIMARY_CANNON_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_PRIMARY_CANNON_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Cannon)),
                 activationStateMachineName = "Weapon",
                 baseMaxStock = 1,
@@ -237,14 +239,14 @@ namespace FirstLightMod.Modules.Survivors
                 cancelSprintingOnActivation = false,
             });
 
-            Modules.Skills.AddPrimarySkills(bodyPrefab, cannonSkillDef);
+            Skills.AddPrimarySkills(bodyPrefab, cannonSkillDef);
 
-            superCannonSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            superCannonSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_PRIMARY_SUPER_CANNON_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_PRIMARY_SUPER_CANNON_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_PRIMARY_SUPER_CANNON_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.SuperCannon)),
                 activationStateMachineName = "Weapon",
                 baseMaxStock = 1,
@@ -272,12 +274,12 @@ namespace FirstLightMod.Modules.Survivors
 
             #region PulseRifle
 
-            pulseRifleSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            pulseRifleSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_PRIMARY_PULSE_RIFLE_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_PRIMARY_PULSE_RIFLE_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_PRIMARY_PULSE_RIFLE_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.PulseRifle)),
                 activationStateMachineName = "Weapon",
                 baseMaxStock = 1,
@@ -295,7 +297,7 @@ namespace FirstLightMod.Modules.Survivors
                 cancelSprintingOnActivation = false,
             });
 
-            Modules.Skills.AddPrimarySkills(bodyPrefab, pulseRifleSkillDef);
+            Skills.AddPrimarySkills(bodyPrefab, pulseRifleSkillDef);
 
 
             #endregion
@@ -336,12 +338,12 @@ namespace FirstLightMod.Modules.Survivors
 
             #region Shovel Toss
 
-            shovelSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            shovelSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SECONDARY_SHOVEL_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_SECONDARY_SHOVEL_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_SHOVEL_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shovel)),
                 activationStateMachineName = "Slide",
                 baseMaxStock = 1,
@@ -361,14 +363,14 @@ namespace FirstLightMod.Modules.Survivors
                 //keywordTokens = new string[] { "KEYWORD_PIERCING" }
             });
 
-            Modules.Skills.AddSecondarySkills(bodyPrefab, shovelSkillDef);
+            Skills.AddSecondarySkills(bodyPrefab, shovelSkillDef);
 
-            pitchforkSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            pitchforkSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SECONDARY_FORK_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_SECONDARY_FORK_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_FORK_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Shovel)),
                 activationStateMachineName = "Slide",
                 baseMaxStock = 1,
@@ -388,7 +390,7 @@ namespace FirstLightMod.Modules.Survivors
                 //keywordTokens = new string[] { "KEYWORD_PIERCING" }
             });
 
-            Modules.Skills.AddSecondarySkills(bodyPrefab, pitchforkSkillDef);
+            Skills.AddSecondarySkills(bodyPrefab, pitchforkSkillDef);
 
 
             #endregion
@@ -397,12 +399,12 @@ namespace FirstLightMod.Modules.Survivors
 
             #region Reap
 
-            reapSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            reapSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SECONDARY_REAP_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_SECONDARY_REAP_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_REAP_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(Reap)),
                 activationStateMachineName = "Weapon",
                 baseMaxStock = 2,
@@ -416,23 +418,23 @@ namespace FirstLightMod.Modules.Survivors
                 isCombatSkill = true,
                 mustKeyPress = true,
                 cancelSprintingOnActivation = true,
-                rechargeStock = 1, 
+                rechargeStock = 1,
                 requiredStock = 1,
                 stockToConsume = 1,
             });
 
-            Modules.Skills.AddSecondarySkills(bodyPrefab, reapSkillDef);
+            Skills.AddSecondarySkills(bodyPrefab, reapSkillDef);
 
             #endregion
 
             #region Grenade
 
-            razorWireGrenadeSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            razorWireGrenadeSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SECONDARY_RAZOR_GRENADE_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_SECONDARY_RAZOR_GRENADE_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SECONDARY_RAZOR_GRENADE_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.RazorGrenade)),
                 activationStateMachineName = "Weapon",
                 baseMaxStock = 1,
@@ -451,7 +453,7 @@ namespace FirstLightMod.Modules.Survivors
                 stockToConsume = 1,
             });
 
-            Modules.Skills.AddSecondarySkills(bodyPrefab, razorWireGrenadeSkillDef);
+            Skills.AddSecondarySkills(bodyPrefab, razorWireGrenadeSkillDef);
 
 
             #endregion
@@ -493,12 +495,12 @@ namespace FirstLightMod.Modules.Survivors
 
 
 
-            groveSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            groveSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_UTILITY_BUNGAL_GROVE_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_UTILITY_BUNGAL_GROVE_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_UTILITY_BUNGAL_GROVE_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.BungalGrove)),
                 activationStateMachineName = "Body",
                 baseMaxStock = 1,
@@ -517,15 +519,15 @@ namespace FirstLightMod.Modules.Survivors
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddUtilitySkills(bodyPrefab, groveSkillDef);
+            Skills.AddUtilitySkills(bodyPrefab, groveSkillDef);
 
 
-            superGroveSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            superGroveSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_UTILITY_LIGHTNING_GROVE_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_UTILITY_LIGHTNING_GROVE_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_UTILITY_LIGHTNING_GROVE_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.BungalGrove)),
                 activationStateMachineName = "Body",
                 baseMaxStock = 1,
@@ -553,12 +555,12 @@ namespace FirstLightMod.Modules.Survivors
             #region Mortar
             //need aim and fire states
 
-            mortarSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            mortarSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_UTILITY_MORTAR_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_UTILITY_MORTAR_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_UTILITY_MORTAR_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.AimMortarShell)),
                 activationStateMachineName = "Body",
                 baseMaxStock = 1,
@@ -576,9 +578,9 @@ namespace FirstLightMod.Modules.Survivors
                 requiredStock = 1,
                 stockToConsume = 1,
             });
-            
 
-            Modules.Skills.AddUtilitySkills(bodyPrefab, mortarSkillDef);
+
+            Skills.AddUtilitySkills(bodyPrefab, mortarSkillDef);
 
             #endregion
 
@@ -586,7 +588,7 @@ namespace FirstLightMod.Modules.Survivors
 
 
         private void InitializeSpecialSkills(string prefix)
-        { 
+        {
 
             #region Bomb
             //SkillDef bombSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
@@ -618,12 +620,12 @@ namespace FirstLightMod.Modules.Survivors
 
             #region Fertilizer
 
-            SkillDef fertilizerSkillDef = Modules.Skills.CreateSkillDef(new SkillDefInfo
+            SkillDef fertilizerSkillDef = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillName = prefix + "_HENRY_BODY_SPECIAL_FERTILIZER_NAME",
                 skillNameToken = prefix + "_HENRY_BODY_SPECIAL_FERTILIZER_NAME",
                 skillDescriptionToken = prefix + "_HENRY_BODY_SPECIAL_FERTILIZER_DESCRIPTION",
-                skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+                skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Fertilizer)),
                 activationStateMachineName = "Body",
                 baseMaxStock = 1,
@@ -642,7 +644,7 @@ namespace FirstLightMod.Modules.Survivors
                 stockToConsume = 1
             });
 
-            Modules.Skills.AddSpecialSkills(bodyPrefab, fertilizerSkillDef);
+            Skills.AddSpecialSkills(bodyPrefab, fertilizerSkillDef);
 
             #endregion
         }
@@ -659,7 +661,7 @@ namespace FirstLightMod.Modules.Survivors
 
             #region DefaultSkin
             //this creates a SkinDef with all default fields
-            SkinDef defaultSkin = Modules.Skins.CreateSkinDef(FARMER_PREFIX + "DEFAULT_SKIN_NAME",
+            SkinDef defaultSkin = Skins.CreateSkinDef(FARMER_PREFIX + "DEFAULT_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
@@ -674,7 +676,7 @@ namespace FirstLightMod.Modules.Survivors
             //add new skindef to our list of skindefs. this is what we'll be passing to the SkinController
             skins.Add(defaultSkin);
             #endregion
-            
+
             //uncomment this when you have a mastery skin
             #region MasterySkin
             /*
@@ -746,16 +748,16 @@ namespace FirstLightMod.Modules.Survivors
         {
             CharacterBody body = self.body.GetComponent<CharacterBody>();
 
-            
-                string farmerBaseNameToken = FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_NAME";
 
-                
+            string farmerBaseNameToken = FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_NAME";
 
-                if (amount > 0 && nonRegen && body.baseNameToken == farmerBaseNameToken && body.GetBuffCount(Buffs.farmerPassive) < 1f)
-                {
-                    body.AddBuff(Buffs.farmerPassive);
-                    //body.AddTimedBuff(Buffs.farmerPassive, 1.3f);
-                }
+
+
+            if (amount > 0 && nonRegen && body.baseNameToken == farmerBaseNameToken && body.GetBuffCount(Buffs.farmerPassive) < 1f)
+            {
+                body.AddBuff(Buffs.farmerPassive);
+                //body.AddTimedBuff(Buffs.farmerPassive, 1.3f);
+            }
 
             return orig(self, amount, procChainMask, nonRegen);
         }
@@ -772,15 +774,15 @@ namespace FirstLightMod.Modules.Survivors
 
                 if (self.baseNameToken == farmerBaseNameToken)
                 {
-                    if (self.HasBuff(Modules.Buffs.farmerPassive))
+                    if (self.HasBuff(Buffs.farmerPassive))
                     {
-                        float attackSpeedIncrease = self.attackSpeed * Modules.Config.farmerPassiveAttackSpeedCoefficient.Value;
+                        float attackSpeedIncrease = self.attackSpeed * Config.farmerPassiveAttackSpeedCoefficient.Value;
                         self.attackSpeed += attackSpeedIncrease;
                     }
 
                     if (self.GetComponent<SkillLocator>().passiveSkill.enabled)
                     {
-                        self.armor += Modules.Config.farmerAltPassiveArmorPerLevel.Value;
+                        self.armor += Config.farmerAltPassiveArmorPerLevel.Value;
                     }
                 }
             }

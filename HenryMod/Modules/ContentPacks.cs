@@ -15,7 +15,8 @@ namespace FirstLightMod.Modules
 
         public static List<RoR2.ExpansionManagement.ExpansionDef> expansionDefs = new List<RoR2.ExpansionManagement.ExpansionDef>();
         public static List<ItemDef> itemDefs = new List<ItemDef>();
-
+        public static List<EquipmentDef> equipmentDefs = new List<EquipmentDef>();
+        public static List<ArtifactDef> artifactDefs = new List<ArtifactDef>();
 
         public static List<GameObject> bodyPrefabs = new List<GameObject>();
         public static List<GameObject> masterPrefabs = new List<GameObject>();
@@ -33,6 +34,9 @@ namespace FirstLightMod.Modules
 
         public static List<NetworkSoundEventDef> networkSoundEventDefs = new List<NetworkSoundEventDef>();
 
+
+
+
         public void Initialize()
         {
             ContentManager.collectContentPackProviders += ContentManager_collectContentPackProviders;
@@ -49,6 +53,8 @@ namespace FirstLightMod.Modules
 
             contentPack.expansionDefs.Add(expansionDefs.ToArray());
             contentPack.itemDefs.Add(itemDefs.ToArray());
+            contentPack.equipmentDefs.Add(equipmentDefs.ToArray());
+            contentPack.artifactDefs.Add(artifactDefs.ToArray());
 
             contentPack.bodyPrefabs.Add(bodyPrefabs.ToArray());
             contentPack.masterPrefabs.Add(masterPrefabs.ToArray());
@@ -65,6 +71,7 @@ namespace FirstLightMod.Modules
             contentPack.effectDefs.Add(effectDefs.ToArray());
 
             contentPack.networkSoundEventDefs.Add(networkSoundEventDefs.ToArray());
+
 
             args.ReportProgress(1f);
             yield break;
@@ -96,6 +103,15 @@ namespace FirstLightMod.Modules
             ContentPacks.itemDefs.Add(itemDef);
         }
 
+        public static void AddEquipmentDef(EquipmentDef equipmentDef)
+        {
+            ContentPacks.equipmentDefs.Add(equipmentDef);
+        }
+
+        public static void AddArtifactDef(ArtifactDef artifactDef)
+        {
+            ContentPacks.artifactDefs.Add(artifactDef);
+        }
         public static void AddCharacterBodyPrefab(GameObject bprefab)
         {
 
@@ -153,5 +169,6 @@ namespace FirstLightMod.Modules
 
             ContentPacks.networkSoundEventDefs.Add(networkSoundEventDef);
         }
+
     }
 }

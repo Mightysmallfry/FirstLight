@@ -88,7 +88,6 @@ namespace FirstLightMod.Modules.Items
 
             //Sets the display of the item on the character
             var itemDisplayRulesDict = CreateItemDisplayRules();
-
             //Adds the item to a list that will be added in the game
             //ItemAPI.Add(new CustomItem(ItemDef, itemDisplayRulesDict));
             Modules.Content.AddItemDef(ItemDef);

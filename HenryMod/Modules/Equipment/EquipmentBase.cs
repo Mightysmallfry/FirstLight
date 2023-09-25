@@ -92,7 +92,10 @@ namespace FirstLightMod.Modules.Equipment
             EquipmentDef.isBoss = IsBoss;
             EquipmentDef.isLunar = IsLunar;
 
-            ItemAPI.Add(new CustomEquipment(EquipmentDef, CreateItemDisplayRules()));
+            //ItemAPI.Add(new CustomEquipment(EquipmentDef, CreateItemDisplayRules()));
+            var itemDisplayRulesDict = CreateItemDisplayRules();
+            Content.AddEquipmentDef(EquipmentDef);
+
             On.RoR2.EquipmentSlot.PerformEquipmentAction += PerformEquipmentAction;
         }
 
