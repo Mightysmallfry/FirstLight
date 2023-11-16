@@ -13,7 +13,7 @@ namespace FirstLightMod.Content.Items
         public override string ItemName => "Fortifier Band";
         public override string ItemNameToken => "FORTIFIER_BAND";
         public override string ItemPickupDescription => "Gain increased armor for each band acquired.";
-        public override string ItemFullDescription => $"Gain <style=cShrine>{armorGain} armor</style>. Gain an additional <style=cShrine>{armorPerBand} armor</style> for each non {ItemName} item in your inventory.";
+        public override string ItemFullDescription => $"Gain <style=cShrine>{ArmorGain} armor</style>. Gain an additional <style=cShrine>{ArmorPerBand} armor</style> for each non {ItemName} item in your inventory.";
         public override string ItemLore => "";
         public override ItemTier Tier => ItemTier.Tier3;
 
@@ -22,13 +22,13 @@ namespace FirstLightMod.Content.Items
         public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/DLC1/ElementalRingVoid/PickupVoidRing.prefab").WaitForCompletion(); //use singularity band
         public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ElementalRingVoid/texVoidRingIcon.png").WaitForCompletion(); //use singularity band
 
-
+       
 
         //More non-Fortifier bands = more armor
         //More Fortifier bands = more armor per other band.
-        public float armorGain; //amount of armor gained for having the item
-        public float armorPerBand; //increases armor for non Fortifier bands
-        public float armorPerCopy; //amount of armor gained per band due to number of fortifier's bands
+        public float ArmorGain; //amount of armor gained for having the item
+        public float ArmorPerBand; //increases armor for non Fortifier bands
+        public float ArmorPerCopy; //amount of armor gained per band due to number of fortifier's bands
 
         public override void Init(ConfigFile config)
         {
@@ -41,19 +41,19 @@ namespace FirstLightMod.Content.Items
         
         private void CreateConfig(ConfigFile config)
         {
-            armorGain = config.Bind<float>(
+            ArmorGain = config.Bind<float>(
                 "Item: " + ItemName,
                 "Armor Gained",
                 25f,
                 "What is the armor gained for having at least one copy of this item").Value;
 
-            armorPerBand = config.Bind<float>(
+            ArmorPerBand = config.Bind<float>(
                 "Item: " + ItemName,
                 "Armor Per Band",
                 75f,
                 "What is the additional armor gained per other Band?").Value;
 
-            armorPerCopy = config.Bind<float>(
+            ArmorPerCopy = config.Bind<float>(
                 "Item: " + ItemName,
                 "Armor Per Copy",
                 25f,
@@ -110,9 +110,9 @@ namespace FirstLightMod.Content.Items
 
             if (GetCount(self) > 0)
             {
-                self.armor += armorGain;
+                self.armor += ArmorGain;
 
-                self.armor += GetCountBands(self) * (armorPerBand + (armorPerCopy * (GetCount(self) - 1)));
+                self.armor += GetCountBands(self) * (ArmorPerBand + (ArmorPerCopy * (GetCount(self) - 1)));
             }
         }
 

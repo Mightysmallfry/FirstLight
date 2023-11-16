@@ -8,7 +8,7 @@ using UnityEngine.AddressableAssets;
 using R2API;
 using BepInEx.Configuration;
 using FirstLightMod.Modules;
-using static RoR2.MasterSpawnSlotController;
+using UnityEngine.Networking;
 
 namespace FirstLightMod.Content.Equipment
 {
@@ -18,7 +18,7 @@ namespace FirstLightMod.Content.Equipment
 
         public override string EquipmentLangTokenName => "MICROBOT_MATRIX";
 
-        public override string EquipmentPickupDesc => "Create a swarm of temporary Defense Microbots to defend you";
+        public override string EquipmentPickupDesc => "Defense Protocol: Steel Curtain";
 
         public override string EquipmentFullDescription => "";
 
@@ -97,23 +97,29 @@ namespace FirstLightMod.Content.Equipment
 
         protected override bool ActivateEquipment(EquipmentSlot equipmentSlot)
         {
-            if (!equipmentSlot.characterBody) { return false; } // Check to see if you have a character body
-            if (!equipmentSlot.characterBody.inventory) { return false; } // Make sure that body has an inventory
+            if(NetworkServer.active)
+            {
+                //if (!equipmentSlot.characterBody.master) { return false; } // Make sure that body has a master
 
 
-            
-            //Give Items
-            equipmentSlot.characterBody.inventory.GiveItem(itemDef, microCount);
-            //Start Timer
-            equipmentSlot.characterBody.AddTimedBuff(matrixBuff, buffDuration);
-            //Notify Player
-            Util.PlaySound("Play_item_proc_healingPotion", equipmentSlot.gameObject);
+                //Give Items
+                equipmentSlot.characterBody.master.inventory.GiveItem(itemDef, microCount);
+
+                //The buff is added items are not.
+                //Start Timer
+                equipmentSlot.characterBody.AddTimedBuff(matrixBuff, buffDuration);
+                //Notify Player
+                Util.PlaySound("Play_item_proc_healingPotion", equipmentSlot.gameObject);
+            }
+
+
             return true;
 
         }
         public override void Hooks()
         {
-            On.RoR2.CharacterBody.RemoveBuff_BuffDef += CharacterBody_RemoveBuff_BuffDef;
+            //Let's just try to add the items correctly.
+            //On.RoR2.CharacterBody.RemoveBuff_BuffDef += CharacterBody_RemoveBuff_BuffDef;
         }
 
         private void CharacterBody_RemoveBuff_BuffDef(On.RoR2.CharacterBody.orig_RemoveBuff_BuffDef orig, CharacterBody self, BuffDef buffDef)
@@ -125,11 +131,11 @@ namespace FirstLightMod.Content.Equipment
                 //Remove Items
                 if (!(self.bodyIndex == SurvivorCatalog.GetBodyIndexFromSurvivorIndex(RoR2Content.Survivors.Captain.survivorIndex)))
                 {
-                    self.inventory.RemoveItem(itemDef, microCount);
+                    self.master.inventory.RemoveItem(itemDef, microCount);
                 }
                 else
                 {
-                    self.inventory.RemoveItem(itemDef, microCount - captainSave);
+                    self.master.inventory.RemoveItem(itemDef, microCount - captainSave);
                 }
             }
 

@@ -10,10 +10,10 @@ namespace FirstLightMod.Content.Items
 {
     public class KnuckleDusters : ItemBase<KnuckleDusters>
     {
-        public override string ItemName => "Knuckled Dusters";
+        public override string ItemName => "Knuckle Dusters";
         public override string ItemNameToken => "KNUCKLE_DUSTERS";
         public override string ItemPickupDescription => "Gain increased crit damage for with each knuckle.";
-        public override string ItemFullDescription => $"Gain <style=cIsDamage>{critDamageGainPercentage}% Critical Damage</style> with each knuckle duster acquired.";
+        public override string ItemFullDescription => $"Gain <style=cIsDamage>{CritDamageGainPercentage}% Critical Damage</style> with each knuckle duster acquired.";
         public override string ItemLore => "";
         public override ItemTier Tier => ItemTier.Tier1;
 
@@ -24,7 +24,7 @@ namespace FirstLightMod.Content.Items
 
 
 
-        public float critDamageGainPercentage; //Percentage of Crit Damage gained for having the item
+        public float CritDamageGainPercentage; //Percentage of Crit Damage gained for having the item
 
         public override void Init(ConfigFile config)
         {
@@ -37,11 +37,11 @@ namespace FirstLightMod.Content.Items
         
         private void CreateConfig(ConfigFile config)
         {
-            critDamageGainPercentage = config.Bind<float>(
+            CritDamageGainPercentage = config.Bind<float>(
                 "Item: " + ItemName,
                 "Critical Strike Damage Gained",
-                10f,
-                "What is percentage of damage that your crit damage increases by having one of these items?").Value;
+                .10f,
+                "What is percentage of damage that your critical damage increases by having one of these items?").Value;
 
         }
 
@@ -85,16 +85,16 @@ namespace FirstLightMod.Content.Items
 
         public override void Hooks()
         {
-            On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateState;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
         }
 
-        private void CharacterBody_RecalculateState(On.RoR2.CharacterBody.orig_RecalculateStats orig, RoR2.CharacterBody self)
+        private void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            orig(self);
 
-            if (GetCount(self) > 0)
+            var itemCount = GetCount(sender);
+            if (itemCount > 0)
             {
-                self.critMultiplier += critDamageGainPercentage * GetCount(self);
+                args.critDamageMultAdd += itemCount * CritDamageGainPercentage;
             }
         }
 

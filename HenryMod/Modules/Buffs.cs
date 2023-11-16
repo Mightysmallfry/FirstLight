@@ -2,19 +2,26 @@
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace FirstLightMod.Modules
 {
     public static class Buffs
     {
-        // armor buff gained during roll
-        internal static BuffDef armorBuff;
 
-        // Farmer's Passive
+        //----------------------------------------------- PASSIVES
         public static BuffDef farmerPassive;
 
+        //----------------------------------------------- BUFFS
         public static BuffDef MicrobotMatrixBuff;
 
+        // armor buff gained during roll
+        internal static BuffDef armorBuff;
+        //----------------------------------------------- DEBUFFS
+        public static BuffDef WendigoVestigeDebuff;
+
+
+        //----------------------------------------------- CHARACTER PREFIXES
         static string farmerPrefix = FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_";
         static string beekeeperPrefix = FirstLightPlugin.DEVELOPER_PREFIX + "_HENRY_BODY_";
 
@@ -39,6 +46,12 @@ namespace FirstLightMod.Modules
                 Color.red,
                 true,
                 false);
+
+            WendigoVestigeDebuff = AddNewBuff(FirstLightPlugin.DEVELOPER_PREFIX + "_WendigoVestigeDebuff",
+                Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texWIPIcon.png").WaitForCompletion(),
+                Color.gray,
+                false,
+                true);
 
 
         }

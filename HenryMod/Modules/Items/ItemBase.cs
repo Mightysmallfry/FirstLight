@@ -5,7 +5,7 @@ using R2API;
 using System;
 
 using HarmonyLib;
-
+using IL.RoR2.ExpansionManagement;
 
 namespace FirstLightMod.Modules.Items
 {
@@ -46,7 +46,8 @@ namespace FirstLightMod.Modules.Items
         public abstract Sprite ItemIcon { get; }
 
         public virtual bool CanRemove { get; } = true;
-        public virtual bool Hidden { get; } = false;
+        public virtual bool AIBlacklisted { get; set; } = false;
+
 
         public virtual UnlockableDef Unlockable { get; }
 

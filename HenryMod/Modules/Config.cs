@@ -198,7 +198,7 @@ namespace FirstLightMod.Modules
 
             jarRadius = plugin.Config.Bind<float>(secondarySection, "Jar Radius", 25.0f, "What is the radius of beekeeper's jar abiltieis. Note: this affects both jar abilities.");
 
-            honeyHealPercentage = plugin.Config.Bind<float>(utilitySection, "HON-Y Heal Percentage", 10.0f, "What is the percentage of beekeeper's hit points that will be healed by Natural Medicine");
+            honeyHealPercentage = plugin.Config.Bind<float>(utilitySection, "HON-Y Heal Percentage", 25.0f, "What is the percentage of beekeeper's hit points that will be healed by Natural Medicine");
 
             beeDamageCoefficient = plugin.Config.Bind<float>(specialSection, "Bee Damage Coefficient", 2.0f, "Damage coefficient of bee bullets");
             hornetDamageCoefficient = plugin.Config.Bind<float>(specialSection, "Hornet Damage Coefficient", 10.0f, "Damage coefficient for damage per tick of the Hornet Laser");

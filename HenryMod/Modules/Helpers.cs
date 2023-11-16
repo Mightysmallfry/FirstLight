@@ -85,9 +85,13 @@ namespace FirstLightMod.Modules
         public void LoadAll()
         {
             LoadItems();
+            Log.Info("All Items Loaded");
             LoadEquipment();
+            Log.Info("All Equipment Loaded");
             LoadEliteEquipment();
+            Log.Info("All Elite Equipment Loaded");
             LoadArtifacts();
+            Log.Info("All Artifacts Loaded");
         }
 
 

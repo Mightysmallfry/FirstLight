@@ -11,12 +11,12 @@ using UnityEngine.AddressableAssets;
 
 namespace FirstLightMod.Content.Items
 {
-    public class KrisBlade : ItemBase<KrisBlade>
+    public class Stiletto : ItemBase<Stiletto>
     {
-        public override string ItemName => "Kris Blade";
-        public override string ItemNameToken => "KRIS_BLADE";
-        public override string ItemPickupDescription => "Deal massively increased bleed damage";
-        public override string ItemFullDescription => $"Gain {initialBleedChance}% bleed chance, all bleed damage is also increased by <style=cIsDamage>{100f* InitialBleedPercentage}%</style>, this percentage is increased by <style=cStack>(+{100f * AdditionalBleedPercentage}%) per additional item.";
+        public override string ItemName => "Stiletto Blade";
+        public override string ItemNameToken => "STILETTO";
+        public override string ItemPickupDescription => "Bleed them dry."; //"Deal massively increased bleed damage"
+        public override string ItemFullDescription => $"Gain {InitialBleedChance}% bleed chance, all bleed damage is also increased by <style=cIsDamage>+{100f* InitialBleedPercentage}%</style>.";
         public override string ItemLore => "A finely made blade that retains its edge. Viscera beware.";
         public override ItemTier Tier => ItemTier.Tier3;
 
@@ -26,7 +26,7 @@ namespace FirstLightMod.Content.Items
 
         //public static GameObject ItemBodyModelPrefab;
 
-        public float initialBleedChance;
+        public float InitialBleedChance;
         public float InitialBleedPercentage;
         public float AdditionalBleedPercentage;
 
@@ -43,7 +43,7 @@ namespace FirstLightMod.Content.Items
 
         public void CreateConfig(ConfigFile config)
         {
-            initialBleedChance = config.Bind<float>(
+            InitialBleedChance = config.Bind<float>(
                 "Item: " + ItemName, 
                 "Initial Bleed Chance",
                 10f,
@@ -115,7 +115,7 @@ namespace FirstLightMod.Content.Items
 
             if (GetCount(self) > 0)
             {
-                self.bleedChance += initialBleedChance;
+                self.bleedChance += InitialBleedChance;
             }
         }
         private void DotController_AddDot(On.RoR2.DotController.orig_AddDot orig, DotController self, GameObject attackerObject, float duration, DotController.DotIndex dotIndex, float damageMultiplier, uint? maxStacksFromAttacker, float? totalDamage, DotController.DotIndex? preUpgradeDotIndex)

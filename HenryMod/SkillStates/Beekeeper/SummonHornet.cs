@@ -1,18 +1,21 @@
 ﻿using RoR2;
 using R2API;
-using UnityEngine;
 using EntityStates;
+using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Events;
+using FirstLightMod.Modules;
 
 namespace FirstLightMod.SkillStates.Beekeeper
 {
     public class SummonHornet : BaseSkillState
     {
+        private int sliceCount = 1; // also effects number of drones created.
 
-        private int maxSummonCount = 2; 
-       
+        private GameObject summonDronePrefab = LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterMasters/DroneBackupMaster");
 
-        private int sliceCount = 2; // also effects number of drones created.
+
+
 
         public override void OnEnter()
         {
@@ -27,12 +30,8 @@ namespace FirstLightMod.SkillStates.Beekeeper
                     Quaternion rotation = Quaternion.Euler(-30f, y + num2, 0f);
                     Quaternion rotation2 = Quaternion.Euler(0f, y + num2 + 180f, 0f);
                     Vector3 position = base.transform.position + rotation * (Vector3.forward * d);
-                    CharacterMaster characterMaster = this.SummonMaster(LegacyResourcesAPI.Load<GameObject>("Prefabs/CharacterMasters/DroneBackupMaster"), position, rotation2);
-                    
-                    //if (characterMaster)
-                    //{
-                    //    characterMaster.gameObject.AddComponent<MasterSuicideOnTimer>().lifeTimer = num + UnityEngine.Random.Range(0f, 3f);
-                    //}
+                    CharacterMaster characterMaster = this.SummonMaster(this.summonDronePrefab, position, rotation2);
+
                 }
             }
         }

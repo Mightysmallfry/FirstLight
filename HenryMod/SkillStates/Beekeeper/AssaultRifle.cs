@@ -1,6 +1,7 @@
 ﻿using EntityStates;
 using RoR2;
 using UnityEngine;
+using FirstLightMod.Content.Beekeeper;
 
 namespace FirstLightMod.SkillStates.Beekeeper
 {
@@ -16,10 +17,14 @@ namespace FirstLightMod.SkillStates.Beekeeper
         public static float range = 256f;
         public static GameObject tracerEffectPrefab = RoR2.LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/Tracers/TracerGoldGat");
 
+
         private float duration;
         private float fireTime;
         private string muzzleString;
         private bool hasFired;
+
+        BeekeeperTracker beekeeperTracker;
+
 
         public override void OnEnter()
         {
@@ -28,6 +33,9 @@ namespace FirstLightMod.SkillStates.Beekeeper
             this.fireTime = 0.05f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.muzzleString = "Muzzle";
+            
+            this.beekeeperTracker = base.GetComponent<BeekeeperTracker>();
+
             base.PlayAnimation("LeftArm, Override", "ShootGun", "ShootGun.playbackRate", 1.8f);
         }
         public override void OnExit()

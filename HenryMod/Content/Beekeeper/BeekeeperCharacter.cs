@@ -3,15 +3,17 @@ using FirstLightMod.Modules;
 using FirstLightMod.Modules.Characters;
 using FirstLightMod.Modules.Survivors;
 using FirstLightMod.SkillStates.Beekeeper;
+using R2API;
 using RoR2;
 using RoR2.Skills;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 
 
-namespace FirstLightMod.Content
+namespace FirstLightMod.Content.Beekeeper
 {
     internal class BeekeeperCharacter : SurvivorBase
     {
@@ -73,13 +75,21 @@ namespace FirstLightMod.Content
 
         public override ItemDisplaysBase itemDisplays => new BeekeeperItemDisplays();
 
+
         //if you have more than one character, easily create a config to enable/disable them like this
         public override ConfigEntry<bool> characterEnabledConfig => null; //Modules.Config.CharacterEnableConfig(bodyName);
 
         public override void InitializeCharacter()
         {
             base.InitializeCharacter();
+
+            //Should add the Tracker to our character
+            base.bodyPrefab.AddComponent<BeekeeperTracker>();
+            base.bodyPrefab.AddComponent<BeekeeperDroneController>();
+
+
             Tokens.AddBeekeeper(BEEKEEPER_PREFIX);
+            FirstLightMod.Log.Info("Beekeeper:Character has been Initialized");
         }
 
         public override void InitializeSkills()
@@ -94,8 +104,13 @@ namespace FirstLightMod.Content
             InitializeSpecialSkills(prefix);
         }
 
+
+
+
         private void InitializePassiveSkills(string prefix)
         {
+            #region passiveDef
+
             SkillDef suppressiveFirePassive = Skills.CreateSkillDef(new SkillDefInfo
             {
                 skillNameToken = BEEKEEPER_PREFIX + "PASSIVE_NAME",
@@ -106,6 +121,8 @@ namespace FirstLightMod.Content
             });
 
             Skills.AddPassiveSkills(bodyPrefab, suppressiveFirePassive);
+            #endregion
+
         }
 
         private void InitializePrimarySkills(string prefix)
@@ -126,7 +143,7 @@ namespace FirstLightMod.Content
                 prefix + "_HENRY_BODY_SECONDARY_TARGET_JAR_NAME",
                 prefix + "_HENRY_BODY_SECONDARY_TARGET_JAR_DESCRIPTION",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texBazookaFireIcon"),
-                new EntityStates.SerializableEntityStateType(typeof(TargetJar)), //change to AssaultRifle skill state
+                new EntityStates.SerializableEntityStateType(typeof(AimTargetJar)), //change to AssaultRifle skill state
                 "Weapon",
                 true));
 
@@ -213,6 +230,8 @@ namespace FirstLightMod.Content
                 stockToConsume = 1,
             });
 
+
+
             Skills.AddSpecialSkills(bodyPrefab, hornetDef);
 
         }
@@ -229,14 +248,14 @@ namespace FirstLightMod.Content
 
             #region DefaultSkin
             //this creates a SkinDef with all default fields
-            SkinDef defaultSkin = Skins.CreateSkinDef(BEEKEEPER_PREFIX + "DEFAULT_SKIN_NAME",
+            SkinDef defaultSkin = Modules.Skins.CreateSkinDef(BEEKEEPER_PREFIX + "DEFAULT_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"),
                 defaultRendererinfos,
                 prefabCharacterModel.gameObject);
 
             //these are your Mesh Replacements. The order here is based on your CustomRendererInfos from earlier
             //pass in meshes as they are named in your assetbundle
-            defaultSkin.meshReplacements = Skins.getMeshReplacements(defaultRendererinfos,
+            defaultSkin.meshReplacements = Modules.Skins.getMeshReplacements(defaultRendererinfos,
                 "meshHenrySword",
                 "meshUzi",
                 "meshHenry");

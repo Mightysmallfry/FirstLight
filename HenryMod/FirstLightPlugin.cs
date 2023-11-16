@@ -10,8 +10,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using FirstLightMod.Content;
+using FirstLightMod.Content.Beekeeper;
 using FirstLightMod.Modules;
 using FirstLightMod.Modules.Items;
+using IL.RoR2.ExpansionManagement;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -74,6 +76,7 @@ namespace FirstLightMod
 
             //new FarmerCharacter().Initialize();
             new BeekeeperCharacter().Initialize();
+            Log.Info("Beekepeper has finished Initializing");
 
             //----------------------------------------------- ITEMS
 
@@ -134,7 +137,6 @@ namespace FirstLightMod
             //RoR2.ExpansionManagement.ExpansionDef expansionDef = new RoR2.ExpansionManagement.ExpansionDef();
             RoR2.ExpansionManagement.ExpansionDef expansionDef = ScriptableObject.CreateInstance<RoR2.ExpansionManagement.ExpansionDef>();
             expansionDef.name = "First Light";
-            // Is there a nicer way to do the tokens?
             expansionDef.nameToken = prefix + "FIRST_LIGHT_NAME";
             expansionDef.descriptionToken = prefix + "FIRST_LIGHT_DESC";
             //
@@ -161,7 +163,7 @@ namespace FirstLightMod
         /// Gives one of each item from the FirsLight Mod to the player
         /// </summary>
         /// <param name="args"></param> 
-        [ConCommand(commandName = "FLP_GiveAllItems", flags = ConVarFlags.None, helpText = "Gives one of each item from the FirstLight Mod to the player. args\\[0\\]=(int)value) ]")]
+        [ConCommand(commandName = "GiveAllItems_FLP", flags = ConVarFlags.None, helpText = "Gives one of each item from the FirstLight Mod to the player. args\\[0\\]=(int)value) ]")]
         private static void GiveModdedItems(ConCommandArgs args)
         {
             try
@@ -181,6 +183,31 @@ namespace FirstLightMod
                 Debug.LogError(ex);
             }
         }
+
+
+
+        [ConCommand(commandName = "GiveAllEquipment_FLP", flags = ConVarFlags.None, helpText = "Spawns a droplet of all the equipment available in the FirstLightMod, near the player.")]
+        private static void GiveModdedEquipment(ConCommandArgs args)
+        {
+            try
+            {
+                CharacterBody characterBody = args.TryGetSenderBody();
+                var transform = PlayerCharacterMasterController.instances[0].master.GetBodyObject().transform;
+
+                foreach (EquipmentDef equipmentDef in ContentPacks.equipmentDefs)
+                {
+                    //I should add rotation so that they don't all pile up in the same location.
+                    PickupDropletController.CreatePickupDroplet(PickupCatalog.FindPickupIndex(equipmentDef.equipmentIndex), transform.position, transform.forward * 20f);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex);
+            }
+        }
+
+
 
     }
 
