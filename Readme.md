@@ -20,7 +20,7 @@ FirstLight is a blanket mod. It'll have a little bit of items, artifacts, equipe
 |  | Red   | **Contained Antimatter**   | Attacks have a `5%` (+ `5%` per stack) chance to deal true damage |
 |  | Red   | **Fortifier Band**         | Gain `25` armor. For each non-Fortifier Band in your inventory gain an additional `75` (+ `25` per stack) armor |
 |  | Red   | **Stiletto**               | Attacks have a `10%` chance to bleed targets and all bleed damage is increased by `100%` (+ `100%` per stack) |
-|  | Red   |  |  |
+|  | Red   | **Radiant Soul**           | Defeating a boss will bring summon them as a companion until they die. Up to `5` (+ `2` per stack) bosses may be under your command at a time. |
 |  | Boss  | **Flamberge**              | Damage dealt through burns now grants barrier equal to damage deal, burn damage is increased by `50%` and gain a `10%` chance to ignite targets on hit. |
 |  | Lunar | **Rabbit Foot**            | Gain `+1` roll for a favorable outcomes but invite more challenge |
 |  | Lunar | **Moondust Whey**          | Deal `2x` the damage but move `1/2` as quickly |
