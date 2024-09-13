@@ -89,7 +89,7 @@ namespace FirstLightMod.Items
 
         public override void Hooks()
         {
-            //Hook onto the director, make elites more common, grant all enemies 1 irradiant pearl.
+            //Hook onto the director, make elites more common, grant all enemies 1 irradiant pearl/give the director a larger budget
         }
         
     }

@@ -42,7 +42,7 @@ namespace FirstLightMod.Content.Items
             DamageBonus = config.Bind<float>(
                 "Item: " + ItemName,
                 "Bonus Damage Percentage Gained",
-                .10f,
+                .25f,
                 "What is the percent of damage gained for having at least one copy of this item").Value;
         }
 
