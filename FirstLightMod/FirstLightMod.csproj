@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Compile Remove="Items\Lunar\VolatileAugment.cs" />
-    <Compile Remove="Items\Tier2\BearTrap.cs" />
     <Compile Remove="Items\Tier2\BloodSword.cs" />
   </ItemGroup>
 
