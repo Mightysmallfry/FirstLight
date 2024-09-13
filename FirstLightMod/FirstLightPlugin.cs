@@ -82,7 +82,7 @@ namespace FirstLightMod
             //new FarmerSurvivor().Initialize();
             //new CavalierSurvivor().Initialize();
             //new WeaponMasterSurvivor().Initialize();
-            Log.Info("Survivors have been initialized");
+            //Log.Info("Survivors have been initialized");
 
 
             // make a content pack and add it. this has to be last

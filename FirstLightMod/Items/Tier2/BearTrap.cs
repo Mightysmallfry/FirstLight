@@ -5,14 +5,14 @@ using RoR2;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace FirstLightMod.Content.Items
+namespace FirstLightMod.Items
 {
     public class BearTrap : ItemBase<BearTrap>
     {
         public override string ItemName => "Bear Trap";
         public override string ItemNameToken => "BEAR_TRAP";
         public override string ItemPickupDescription => "Gain increased damage against slowed and rooted enemies.";
-        public override string ItemFullDescription => $"Deal an additional <style=cIsDamage>{DamageBonus * 100}% damage</style> towards slowed and rooted enemies";
+        public override string ItemFullDescription => $"Deal an additional <style=cIsDamage>{DamageBonus}% damage</style> towards slowed and rooted enemies";
         public override string ItemLore => "";
         public override ItemTier Tier => ItemTier.Tier2;
 
@@ -41,7 +41,7 @@ namespace FirstLightMod.Content.Items
             DamageBonus = config.Bind<float>(
                 "Item: " + ItemName,
                 "Bonus Damage Percentage Gained",
-                .25f,
+                25f,
                 "What is the percent of damage gained for having at least one copy of this item").Value;
         }
 
@@ -85,37 +85,28 @@ namespace FirstLightMod.Content.Items
 
         public override void Hooks()
         {
-            On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy; //Change to take damage.
+            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
-        private void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
+        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
-            orig(self, damageInfo, victim);
 
-            CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
-            var itemCount = GetCount(attackerBody);
-
-            if (itemCount > 0 && !damageInfo.rejected)
+            if (damageInfo.attacker && damageInfo.attacker.TryGetComponent(out CharacterBody attackerBody) && attackerBody.inventory)
             {
-                if (attackerBody.HasBuff(RoR2Content.Buffs.Slow50) ||
-                    attackerBody.HasBuff(RoR2Content.Buffs.Slow60) ||
-                    attackerBody.HasBuff(RoR2Content.Buffs.Slow80) ||
-                    attackerBody.HasBuff(RoR2Content.Buffs.Nullified) ||
-                    attackerBody.HasBuff(RoR2Content.Buffs.LunarSecondaryRoot) ||
-                    attackerBody.HasBuff(RoR2Content.Buffs.Entangle) ||
-                    attackerBody.HasBuff(RoR2Content.Buffs.BeetleJuice) ||
-                    attackerBody.HasBuff(RoR2Content.Buffs.ClayGoo))
+                if (GetCount(attackerBody) > 0)
                 {
-                    //Modify the damage if they have the slows/roots
-                    damageInfo.damage *= (float)(1 + damageInfo.damage * (DamageBonus * itemCount));
+                    if (attackerBody.HasBuff(RoR2Content.Buffs.Slow50) || attackerBody.HasBuff(RoR2Content.Buffs.Slow60) || attackerBody.HasBuff(RoR2Content.Buffs.Slow80) ||
+                        attackerBody.HasBuff(RoR2Content.Buffs.Nullified) || attackerBody.HasBuff(RoR2Content.Buffs.LunarSecondaryRoot) || attackerBody.HasBuff(RoR2Content.Buffs.Entangle) ||
+                        attackerBody.HasBuff(RoR2Content.Buffs.ClayGoo))
+                    {
+                        damageInfo.damage += (float)(1 + damageInfo.damage * ((DamageBonus/100f) * (float)GetCount(attackerBody)));
+                    }
                 }
             }
 
-
-
-
-
+            orig(self, damageInfo);
         }
+
 
     }
 }
