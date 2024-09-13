@@ -7,6 +7,12 @@
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Characters\**" />
+    <EmbeddedResource Remove="Characters\**" />
+    <None Remove="Characters\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <Compile Remove="Items\Lunar\VolatileAugment.cs" />
@@ -41,7 +47,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Characters\Survivors\Farmhand\Components\" />
 	  <Folder Include="Items\Void\" />
 	</ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
