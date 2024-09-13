@@ -2,7 +2,6 @@
 using FirstLightMod.Modules.Items;
 using R2API;
 using RoR2;
-using static FirstLightMod.Modules.Helpers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 

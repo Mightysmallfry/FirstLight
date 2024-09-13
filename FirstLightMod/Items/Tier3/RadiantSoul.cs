@@ -7,12 +7,12 @@ using UnityEngine.AddressableAssets;
 
 namespace FirstLightMod.Items
 {
-    public class StandardIssue : ItemBase<StandardIssue>
+    public class RadiantSoul : ItemBase<RadiantSoul>
     {
-        public override string ItemName => "Standard Issue";
-        public override string ItemNameToken => "STANDARD_ISSUE";
+        public override string ItemName => "Radiant Soul";
+        public override string ItemNameToken => "RADIANT_SOUL";
         public override string ItemPickupDescription => "Bring to heel the lords of this world.";
-        public override string ItemFullDescription => $"Gain an additional {procChancePerBossKilled}% proc chance on all abilities upon defeating a boss, up to a maximum of {maxProcChance}%.";
+        public override string ItemFullDescription => $"Upon defeating a boss, recruit them into your service. Up to a maximum of {maxNumberOfBossCompanions} bosses may be recruited at any time.";
         public override string ItemLore => "";
         public override ItemTier Tier => ItemTier.Tier3;
 
@@ -23,9 +23,9 @@ namespace FirstLightMod.Items
         public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/DLC1/ElementalRingVoid/texVoidRingIcon.png").WaitForCompletion(); //use singularity band
 
 
-        public float procChancePerBossKilled;
-        public float maxProcChance;
-        public float additionalMaxProcChance;
+        public float bossCompanionSizeMultiplier;
+        public int maxNumberOfBossCompanions;
+        public int additionalBossCompanions;
 
         public float appliedProcChance = 0f;
 
@@ -41,24 +41,24 @@ namespace FirstLightMod.Items
         
         private void CreateConfig(ConfigFile config)
         {
-            procChancePerBossKilled = config.Bind<float>(
+            bossCompanionSizeMultiplier = config.Bind<float>(
                 "Item: " + ItemName,
-                "Proc Chance Per Boss Killed",
-                5f,
-                "How much proc chance should killing a boss give?").Value;
+                "Boss Companion Conversion Factor",
+                .10f,
+                "What should the boss companions size and damage output be relative to when the player fights them?").Value;
 
 
-            maxProcChance = config.Bind<float>(
+            maxNumberOfBossCompanions = config.Bind<int>(
                 "Item: " + ItemName,
-                "maxProcChancePerItem",
-                25f,
-                "What is the maximum proc chance one item may give?").Value;
+                "Maximum Number of Boss Companions",
+                5,
+                "What is the maximum number of boss companions gained when in possession of one item?").Value;
 
-            additionalMaxProcChance = config.Bind<float>(
+            additionalBossCompanions = config.Bind<int>(
                 "Item: " + ItemName,
-                "additionalMaxProcChance",
-                10f,
-                "How much should additional copies of this item increase the maximum given proc chance?").Value;
+                "Additional Companions",
+                2,
+                "How many additional bosses should appear per additional item.?").Value;
 
 
         }
@@ -113,9 +113,9 @@ namespace FirstLightMod.Items
         {
             if (damageReport.victimBody && damageReport.victimBody.isBoss && damageReport.attackerBody && damageReport.attackerBody.inventory && GetCount(damageReport.attackerBody) > 0)
             {
-                if (appliedProcChance < maxProcChance)
+                if (appliedProcChance < maxNumberOfBossCompanions)
                 {
-                    appliedProcChance += procChancePerBossKilled;
+                    appliedProcChance += bossCompanionSizeMultiplier;
                 }
             }
         }
