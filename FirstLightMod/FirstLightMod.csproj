@@ -24,6 +24,61 @@
     <None Remove="nuget.config" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="Characters\Survivors\Cavalier\Achievements\CavalierMasteryAchievement.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Achievements\CavalierMeridianAchievement.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\CavalierSurvivor.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Components\CavalierWeaponComponent.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Content\CavalierAI.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Content\CavalierAssets.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Content\CavalierBuffs.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Content\CavalierConfig.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Content\CavalierItemDisplays.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Content\CavalierStates.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Content\CavalierStaticValues.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Content\CavalierTokens.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\Content\CavalierUnlockables.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\SkillStates\Flare.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\SkillStates\Flourish.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\SkillStates\Rapier.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\SkillStates\Roll.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\SkillStates\SlashCombo.cs" />
+    <Compile Include="Characters\Survivors\Cavalier\SkillStates\Thrust.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Achievements\FarmerMasteryAchievement.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Achievements\FarmerMeridianAchievement.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Content\FarmerAI.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Content\FarmerAssets.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Content\FarmerBuffs.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Content\FarmerConfig.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Content\FarmerItemDisplays.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Content\FarmerStates.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Content\FarmerStaticValues.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Content\FarmerTokens.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\Content\FarmerUnlockables.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\FarmerSurvivor.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Primary\AssaultRifle.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Primary\Cannon.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Primary\PulseRifle.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Primary\Shotgun.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Primary\SuperCannon.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Primary\SuperShotgun.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Secondary\Grenade\AimRazorGrenade.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Secondary\Grenade\ThrowRazorGrenade.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Secondary\Reap.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Secondary\Shovel\Shovel.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Secondary\Shovel\SuperShovel.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Secondary\SuperGrenade\AimThermalGrenade.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Secondary\SuperGrenade\ThrowThermalGrenade.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Special\Fertilizer.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Special\HellfireRockets.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Utility\Grove\BungalGrove.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Utility\Grove\LightningGrove.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Utility\Mortar\AimMortarShell.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Utility\Mortar\FireMortarShell.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Utility\SuperMortar\AimSuperMortarShell.cs" />
+    <Compile Include="Characters\Survivors\Farmhand\SkillStates\Utility\SuperMortar\FireSuperMortarShell.cs" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="BepInEx.Analyzers" Version="1.0.*">
 			<PrivateAssets>all</PrivateAssets>
@@ -47,6 +102,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Characters\Survivors\Farmhand\Components\" />
 	  <Folder Include="Items\Void\" />
 	</ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

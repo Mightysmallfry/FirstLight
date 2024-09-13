@@ -22,9 +22,9 @@ namespace FirstLightMod.Items
 
         //public static GameObject ItemBodyModelPrefab;
 
-        public float InitialBleedChance;
-        public float InitialBleedPercentage;
-        public float AdditionalBleedPercentage;
+        public float InitialBoomChance;
+        public float AdditionalBoomChance;
+        public float InitialExecuteAmount;
 
 
 
@@ -39,25 +39,25 @@ namespace FirstLightMod.Items
 
         public void CreateConfig(ConfigFile config)
         {
-            InitialBleedChance = config.Bind<float>(
+            InitialBoomChance = config.Bind<float>(
                 "Item: " + ItemName, 
-                "Initial Bleed Chance",
+                "Initial Boom Chance",
                 10f,
-                "How much bleed chance should 1 item give?"
+                "What are the chances that the burn tick explodes?"
                 ).Value;
 
-            InitialBleedPercentage = config.Bind<float>(
+            InitialExecuteAmount = config.Bind<float>(
                 "Item: " + ItemName,
-                "Bleed damage initial increase percentage", 
-                1.0f,
-                "How much damage should the bleed damage be initially increased?"
+                "Low Health Execute Percentage", 
+                20f,
+                "What percentage of hit points should be left before the execute?"
                 ).Value;
 
-            AdditionalBleedPercentage = config.Bind<float>(
+            AdditionalBoomChance = config.Bind<float>(
                 "Item: " + ItemName,
-                "Bleed damage additional increase percentage",
-                1.0f,
-                "How much damage should the bleed damage be increased per additional item?"
+                "Additional Boom Chance",
+                5f,
+                "By how much should an additional item increase the explosion chances?"
                 ).Value;
 
         }
@@ -99,6 +99,7 @@ namespace FirstLightMod.Items
 
         public override void Hooks()
         {
+
 
         }
 

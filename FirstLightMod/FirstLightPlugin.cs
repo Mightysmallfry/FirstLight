@@ -8,8 +8,8 @@ using System.Security.Permissions;
 using FirstLightMod.Items;
 using FirstLightMod.Modules;
 ////using FirstLightMod.Survivors.Banneret;
-//using FirstLightMod.Survivors.Farmer;
-//using FirstLightMod.Survivors.Cavalier;
+using FirstLightMod.Survivors.Farmer;
+using FirstLightMod.Survivors.Cavalier;
 using RoR2.ExpansionManagement;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -79,10 +79,10 @@ namespace FirstLightMod
 
             //Character Initialization
             //Log.Info("-------------------Survivors----------------------");
-            //new FarmerSurvivor().Initialize();
-            //new CavalierSurvivor().Initialize();
+            new FarmerSurvivor().Initialize();
+            new CavalierSurvivor().Initialize();
             //new WeaponMasterSurvivor().Initialize();
-            //Log.Info("Survivors have been initialized");
+            Log.Info("Survivors have been initialized");
 
 
             // make a content pack and add it. this has to be last
