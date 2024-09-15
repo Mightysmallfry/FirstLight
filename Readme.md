@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/5788da2f-eb3d-44d7-9105-d6ece1bf572a)# What is FirstLight
+# What is FirstLight
 
 FirstLight is a blanket mod. It'll have a little bit of items, artifacts, equipement and survivors to play around with.
 
