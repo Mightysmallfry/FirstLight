@@ -38,7 +38,7 @@ namespace FirstLightMod.Survivors.Cavalier
 
             #region Skins
             Language.Add(prefix + "MASTERY_SKIN_NAME", "Fleet Master");
-            Language.Add(prefix + "MERIDIAN_SKIN_NAME", "Broken");
+            Language.Add(prefix + "MERIDIAN_SKIN_NAME", "Lost");
             #endregion
 
             #region Passive

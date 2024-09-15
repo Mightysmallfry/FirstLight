@@ -20,12 +20,15 @@ namespace FirstLightMod.Items
         public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/BleedOnHit/PickupTriTip.prefab").WaitForCompletion(); //Again tri-tip dagger
         public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/BleedOnHit/texTriTipIcon.png").WaitForCompletion(); //Could use tri-tip dagger for now
 
-        //public static GameObject ItemBodyModelPrefab;
+        public static GameObject ExplosionEffectPrefab = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
+
+        public static float Radius = 5f;
 
         public float InitialBoomChance;
         public float AdditionalBoomChance;
         public float InitialExecuteAmount;
-
+        
+        private static SphereSearch IgniteSphereSearch = new SphereSearch();
 
 
         public override void Init(ConfigFile config)
@@ -99,11 +102,98 @@ namespace FirstLightMod.Items
 
         public override void Hooks()
         {
-
+            On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
 
         }
 
+        private void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
+        {
 
 
+            //Null checking
+
+            //Check for item and proc
+
+            // float num = 8f + 4f * (float)igniteOnKillCount;
+            // float radius = victimBody.radius;
+            // float num2 = num + radius;
+            // float num3 = 1.5f;
+            // float baseDamage = damageReport.attackerBody.damage * num3;
+            // Vector3 corePosition = victimBody.corePosition;
+
+            //Scan for enemies
+            // Mixtape.IgniteSphereSearch.origin = corePosition;
+            // GlobalEventManager.igniteOnKillSphereSearch.mask = LayerIndex.entityPrecise.mask;
+            // GlobalEventManager.igniteOnKillSphereSearch.radius = Mixtape.Radius;
+            // GlobalEventManager.igniteOnKillSphereSearch.RefreshCandidates();
+            // GlobalEventManager.igniteOnKillSphereSearch.FilterCandidatesByHurtBoxTeam(TeamMask.GetUnprotectedTeams(attackerTeamIndex));
+            // GlobalEventManager.igniteOnKillSphereSearch.FilterCandidatesByDistinctHurtBoxEntities();
+            // GlobalEventManager.igniteOnKillSphereSearch.OrderCandidatesByDistance();
+            // GlobalEventManager.igniteOnKillSphereSearch.GetHurtBoxes(GlobalEventManager.igniteOnKillHurtBoxBuffer);
+            // GlobalEventManager.igniteOnKillSphereSearch.ClearCandidates();
+            // float value = (float)(1 + igniteOnKillCount) * 0.75f * damageReport.attackerBody.damage;
+            // for (int i = 0; i < GlobalEventManager.igniteOnKillHurtBoxBuffer.Count; i++)
+            // {
+            // HurtBox hurtBox = GlobalEventManager.igniteOnKillHurtBoxBuffer[i];
+            // if (hurtBox.healthComponent)
+            // {
+            // InflictDotInfo inflictDotInfo = new InflictDotInfo
+            // {
+            // victimObject = hurtBox.healthComponent.gameObject,
+            // attackerObject = damageReport.attacker,
+            // totalDamage = new float?(value),
+            // dotIndex = DotController.DotIndex.Burn,
+            // damageMultiplier = 1f
+            // };
+            // UnityEngine.Object exists;
+            // if (damageReport == null)
+            // {
+            // exists = null;
+            // }
+            // else
+            // {
+            // CharacterMaster attackerMaster = damageReport.attackerMaster;
+
+            // Check for upgrading the fire 
+
+            // exists = ((attackerMaster != null) ? attackerMaster.inventory : null);
+            // }
+            // if (exists)
+            // {
+            // StrengthenBurnUtils.CheckDotForUpgrade(damageReport.attackerMaster.inventory, ref inflictDotInfo);
+            // }
+            // DotController.InflictDot(ref inflictDotInfo);
+            // }
+            // }
+            // GlobalEventManager.igniteOnKillHurtBoxBuffer.Clear();
+
+
+
+
+            //Create a new blast attack     
+
+            //new BlastAttack
+            // {
+            // radius = Mixtape.Radius,
+            // baseDamage = baseDamage,
+            // procCoefficient = 0f,
+            // crit = Util.CheckRoll(damageReport.attackerBody.crit, damageReport.attackerMaster),
+            // damageColorIndex = DamageColorIndex.Item,
+            // attackerFiltering = AttackerFiltering.Default,
+            // falloffModel = BlastAttack.FalloffModel.None,
+            // attacker = damageReport.attacker,
+            // teamIndex = attackerTeamIndex,
+            // position = corePosition
+            // }.Fire();
+            // EffectManager.SpawnEffect(GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab, new EffectData
+            // {
+            // origin = corePosition,
+            // scale = Mixtape.Radius,
+            // rotation = Util.QuaternionSafeLookRotation(damageReport.damageInfo.force)
+            // }, true);
+
+
+            orig(self, damageInfo, victim);
+        }
     }
 }
