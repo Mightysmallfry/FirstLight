@@ -26,8 +26,8 @@ namespace FirstLightMod.Items
 
         public static float Radius = 5f;
 
-        public float InitialBoomChance;
-        public float AdditionalBoomChance;
+        public float InitialEruptionChance;
+        public float AdditionalEruptionChance;
         
         private static SphereSearch IgniteSphereSearch = new SphereSearch();
 
@@ -43,7 +43,7 @@ namespace FirstLightMod.Items
 
         public void CreateConfig(ConfigFile config)
         {
-            InitialBoomChance = config.Bind<float>(
+            InitialEruptionChance = config.Bind<float>(
                 "Item: " + ItemName, 
                 "Initial Boom Chance",
                 10f,
@@ -52,7 +52,7 @@ namespace FirstLightMod.Items
             
 
 
-            AdditionalBoomChance = config.Bind<float>(
+            AdditionalEruptionChance = config.Bind<float>(
                 "Item: " + ItemName,
                 "Additional Boom Chance",
                 5f,
@@ -98,22 +98,22 @@ namespace FirstLightMod.Items
 
         public override void Hooks()
         {
-            On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy; //Move to take damage? or on deal dot method?
+            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
-        private void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
+        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
 
             if (damageInfo.attacker && damageInfo.attacker.TryGetComponent(out CharacterBody attackerBody) && attackerBody.master)
             {
-                if (victim && victim.TryGetComponent(out CharacterBody victimBody) && GetCount(attackerBody) > 0)
+                if (self.body && self.TryGetComponent(out CharacterBody victimBody))
                 {
-                    if (Util.CheckRoll(InitialBoomChance + (AdditionalBoomChance * ((float)GetCount(attackerBody) - 1f))))
+                    //By including the master into the check roll, we also account for luck
+                    if (GetCount(attackerBody.master) > 0 && Util.CheckRoll(InitialEruptionChance + (AdditionalEruptionChance * ((float)GetCount(attackerBody) - 1f)), attackerBody.master))
                     {
-
                         //Calculate range for the attack based off of itemCount and enemy size
                         float itemRange = 12f;
-                        
+
                         //radius of the enemy that erupts
                         float enemyRadius = victimBody.radius;
                         float finalRadius = itemRange + enemyRadius;
@@ -124,8 +124,6 @@ namespace FirstLightMod.Items
 
                         //Calculate our burn damage per tick
                         float burnDamage = 0.75f * attackerBody.damage;
-
-
 
                         //Create out Sphere Search for finding people
                         Vector3 corePosition = victimBody.corePosition;
@@ -140,8 +138,6 @@ namespace FirstLightMod.Items
                         //Add all the hurtboxes in the search to our list
                         Mixtape.IgniteSphereSearch.GetHurtBoxes(Mixtape.EruptionHurtBoxBuffer);
                         Mixtape.IgniteSphereSearch.ClearCandidates();
-
-                        
 
 
                         //Look through the hurtboxes in the area
@@ -203,16 +199,13 @@ namespace FirstLightMod.Items
                                 scale = finalRadius,
                                 rotation = Util.QuaternionSafeLookRotation(damageInfo.force)
                             }, true);
-
-
                     }
+
                 }
+
             }
-            
 
-
-
-            orig(self, damageInfo, victim);
+            orig(self, damageInfo);
         }
 
 

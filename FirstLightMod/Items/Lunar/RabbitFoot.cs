@@ -90,7 +90,23 @@ namespace FirstLightMod.Items
         public override void Hooks()
         {
             //Hook onto the director, make elites more common, grant all enemies 1 irradiant pearl/give the director a larger budget
+            //character Masters have the luck stat
+            //Master inventories will work all the time
+            On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
         }
-        
+
+        private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
+        {
+            if (self && self.master)
+            {
+                if (GetCount(self.master) > 0)
+                {
+                    self.master.luck += LuckAmountGranted * GetCount(self.master);
+
+                }
+            }
+
+            orig(self);
+        }
     }
 }

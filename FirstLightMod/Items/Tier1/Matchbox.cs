@@ -88,12 +88,13 @@ namespace FirstLightMod.Items
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
         }
 
+
         private void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
 
-            if (victim && damageInfo.attacker.TryGetComponent(out CharacterBody attackerBody) && attackerBody.inventory) 
+            if (victim && damageInfo.attacker.TryGetComponent(out CharacterBody attackerBody) && attackerBody.master && attackerBody.master.inventory)
             {
-                if (GetCount(attackerBody) > 0 && Util.CheckRoll((IgnitePercentChance * GetCount(attackerBody)), attackerBody.master))
+                if (GetCount(attackerBody.master) > 0 && Util.CheckRoll((IgnitePercentChance * GetCount(attackerBody.master)), attackerBody.master))
                 {
                     InflictDotInfo inflictDotInfo = new InflictDotInfo
                     {
@@ -103,14 +104,12 @@ namespace FirstLightMod.Items
                         damageMultiplier = 1f,
                         dotIndex = DotController.DotIndex.Burn
                     };
-                    StrengthenBurnUtils.CheckDotForUpgrade(attackerBody.inventory, ref inflictDotInfo);
+                    StrengthenBurnUtils.CheckDotForUpgrade(attackerBody.master.inventory, ref inflictDotInfo);
                     DotController.InflictDot(ref inflictDotInfo);
-
-
                 }
             }
 
-            orig (self, damageInfo, victim);
+            orig(self, damageInfo, victim);
 
         }
     }
