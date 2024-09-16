@@ -2,6 +2,7 @@
 using FirstLightMod.Modules.Items;
 using R2API;
 using RoR2;
+using RoR2.Projectile;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -94,7 +95,18 @@ namespace FirstLightMod.Items
             {
                 if (GetCount(attackerBody) > 0 && Util.CheckRoll((IgnitePercentChance * GetCount(attackerBody)), attackerBody.master))
                 {
-                    damageInfo.damageType = damageInfo.damageType & DamageType.IgniteOnHit;
+                    InflictDotInfo inflictDotInfo = new InflictDotInfo
+                    {
+                        attackerObject = damageInfo.attacker,
+                        victimObject = victim,
+                        totalDamage = new float?(damageInfo.damage / 2f),
+                        damageMultiplier = 1f,
+                        dotIndex = DotController.DotIndex.Burn
+                    };
+                    StrengthenBurnUtils.CheckDotForUpgrade(attackerBody.inventory, ref inflictDotInfo);
+                    DotController.InflictDot(ref inflictDotInfo);
+
+
                 }
             }
 
