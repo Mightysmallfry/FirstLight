@@ -147,7 +147,7 @@ namespace FirstLightMod.Items
 
 
                             //Check if the target can be dealt damage and inflict our burn dot
-                            if (hurtBox.healthComponent)
+                            if (hurtBox.healthComponent && hurtBox != victimBody.mainHurtBox) //Try to not effect the eruptor.
                             {
                                 InflictDotInfo inflictDotInfo = new InflictDotInfo
                                 {
