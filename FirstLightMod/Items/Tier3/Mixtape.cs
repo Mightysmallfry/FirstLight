@@ -45,7 +45,7 @@ namespace FirstLightMod.Items
         {
             InitialEruptionChance = config.Bind<float>(
                 "Item: " + ItemName, 
-                "Initial Boom Chance",
+                "Initial Eruption Chance",
                 10f,
                 "What are the chances that the burn tick explodes?"
                 ).Value;
@@ -54,7 +54,7 @@ namespace FirstLightMod.Items
 
             AdditionalEruptionChance = config.Bind<float>(
                 "Item: " + ItemName,
-                "Additional Boom Chance",
+                "Additional Eruption Chance",
                 5f,
                 "By how much should an additional item increase the explosion chances?"
                 ).Value;
@@ -174,19 +174,19 @@ namespace FirstLightMod.Items
                         Mixtape.EruptionHurtBoxBuffer.Clear();
 
                         //Do the blast damage to nearby creatures
-                        new BlastAttack
-                        {
-                            radius = finalRadius,
-                            baseDamage = explosionDamage,
-                            procCoefficient = 0f,
-                            crit = Util.CheckRoll(attackerBody.crit),
-                            damageColorIndex = DamageColorIndex.Item,
-                            attackerFiltering = AttackerFiltering.Default,
-                            falloffModel = BlastAttack.FalloffModel.None,
-                            attacker = damageInfo.attacker,
-                            teamIndex = attackerBody.teamComponent.teamIndex,
-                            position = corePosition
-                        }.Fire();
+                        //new BlastAttack
+                        //{
+                        //    radius = finalRadius,
+                        //    baseDamage = explosionDamage,
+                        //    procCoefficient = 0f,
+                        //    crit = Util.CheckRoll(attackerBody.crit),
+                        //    damageColorIndex = DamageColorIndex.Item,
+                        //    attackerFiltering = AttackerFiltering.Default,
+                        //    falloffModel = BlastAttack.FalloffModel.None,
+                        //    attacker = damageInfo.attacker,
+                        //    teamIndex = attackerBody.teamComponent.teamIndex,
+                        //    position = corePosition
+                        //}.Fire();
 
 
 
@@ -204,6 +204,7 @@ namespace FirstLightMod.Items
                 }
 
             }
+            
 
             orig(self, damageInfo);
         }
