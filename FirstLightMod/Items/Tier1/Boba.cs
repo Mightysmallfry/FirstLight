@@ -100,6 +100,7 @@ namespace FirstLightMod.Items
                 self.baseMoveSpeed += self.baseMoveSpeed * ((StatIncreasePercentage / 100f) * (float)GetCount(self));
                 self.baseRegen += self.baseRegen * ((StatIncreasePercentage / 100f) * (float)GetCount(self));
                 self.baseDamage += self.baseDamage * ((StatIncreasePercentage / 100f) * (float)GetCount(self));
+                
             }
         }
 

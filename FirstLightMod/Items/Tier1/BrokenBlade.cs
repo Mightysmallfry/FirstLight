@@ -94,7 +94,7 @@ namespace FirstLightMod.Items
                 if (self.body.isChampion || self.body.isElite)
                 {
                     damageInfo.damageColorIndex = DamageColorIndex.WeakPoint;
-                    damageInfo.damage = damageInfo.damage * (1.0f + (EliteDamageIncrease / 100f * (float)GetCount(attackerBody)));
+                    damageInfo.damage = damageInfo.damage * (1.0f + (EliteDamageIncrease / 100f) * (float)GetCount(attackerBody));
                 }
             }
 
