@@ -24,6 +24,8 @@ namespace FirstLightMod.Items
 
         public float LuckAmountGranted;
 
+        public int ActiveChallengeItemCount;
+
 
 
         public override void Init(ConfigFile config)
