@@ -12,7 +12,7 @@ FirstLight is a blanket mod. It'll have a little bit of items, artifacts, equipe
 | ⚒️ |  | White | **Boba**                   | Increases all base stats `1%` (+ `1%` per stack) |
 | 🏁 |  | White | **Matchbox**               | On hit, have a `10%` chance to ignite targets |
 | 🪲 |  | Green | **Bear Trap**              | Gain an additional `25%` (+ `25%` per stack) damage towards rooted or slowed targets |
-| ⚒️ |  | Green | **Ice Water**              | Attacks drench enemies in water, once drenched enough, the enemies crack, becoming weakened |
+| ⚒️ |  | Green | **Ice Water**              | Attacks give enemies Ice Quake, at `5` stacks of Ice Quake the target takes a chunk of massive damage |
 | 🪲 |  | Green | **Frying Pan**             | Attacks on stunned creatures increase their active debuffs by 1 stack |
 | ⚒️ |  | Green | **Sapphire Shield**        | Gain a `10%` max hit point shield when picked up, kills restore `10%` of your maximum shield. |
 | 🪲 |  | Green | **Spurs**                  | Gain additional movement speed and deal damage proportional to your movement speed |
