@@ -39,7 +39,7 @@ namespace FirstLightMod.Items
             CreateConfig(config);
             CreateItemDisplayRules();
             CreateLang();
-            CreateBuff();
+            CreateBuffs();
             CreateItem();
             Hooks();
         }
@@ -66,7 +66,7 @@ namespace FirstLightMod.Items
 
         }
 
-        private void CreateBuff()
+        private void CreateBuffs()
         {
             fortifiedBuff = Modules.Content.CreateAndAddBuff("Fortified",
                 LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,

@@ -16,6 +16,11 @@ namespace FirstLightMod.Items
         public override string ItemLore => "A glass of ice cold clean water, barely touched.";
         public override ItemTier Tier => ItemTier.Tier2;
 
+        //Enemies get stacks, if 10 stacks, quake
+        //quake would chain react to all enemies with at least 1 stack,
+        //dealing damage depending on the number of stacks
+        //chain reaction does not remove stacks other than detonator.
+
         //public override ItemTag[] ItemTags => new ItemTag[] { ItemTag.Damage }
         public override GameObject ItemModel => Addressables.LoadAssetAsync<GameObject>("RoR2/Base/BleedOnHit/PickupTriTip.prefab").WaitForCompletion(); //Again tri-tip dagger
         public override Sprite ItemIcon => Addressables.LoadAssetAsync<Sprite>("RoR2/Base/SprintBonus/texSodaIcon.png").WaitForCompletion(); //Could use tri-tip dagger for now
@@ -24,11 +29,15 @@ namespace FirstLightMod.Items
 
         public float HealOnKillAmount;
 
+        public static BuffDef glacialQuakeBuff;
+
+
         public override void Init(ConfigFile config)
         {
             CreateConfig(config);
             CreateItemDisplayRules();
             CreateLang();
+            CreateBuffs();
             CreateItem();
             Hooks();
         }
@@ -42,6 +51,16 @@ namespace FirstLightMod.Items
                 "How much healing should the item give?"
                 ).Value;
 
+
+        }
+
+        private void CreateBuffs()
+        {
+            glacialQuakeBuff = Modules.Content.CreateAndAddBuff("Glacial Quake",
+                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
+                new Color(20f, 13f, 149f),
+                true,
+                true);
 
         }
 
@@ -82,20 +101,18 @@ namespace FirstLightMod.Items
 
         public override void Hooks()
         {
-            On.RoR2.GlobalEventManager.OnCharacterDeath += GlobalEventManager_OnCharacterDeath;
+            On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
         }
 
-
-        private void GlobalEventManager_OnCharacterDeath(On.RoR2.GlobalEventManager.orig_OnCharacterDeath orig, GlobalEventManager self, DamageReport damageReport)
+        private void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
-            if (damageReport.attackerBody && GetCount(damageReport.attackerBody) > 0)
-            {
-                damageReport.attackerBody.healthComponent.HealFraction((HealOnKillAmount * (float)GetCount(damageReport.attackerBody))/100f, damageReport.damageInfo.procChainMask);
-            }
-            
-            
 
-            orig(self, damageReport);
+
+
+
+
+            orig(self, damageInfo, victim);
         }
+
     }
 }
