@@ -6,25 +6,33 @@ FirstLight is a blanket mod. It'll have a little bit of items, artifacts, equipe
 
 
 ## Items
+| Status | Icon | Rarity | Name | Effect | 
+|:------:|:----:|:-------| :-----|:------ |
+| 🪲 |  | White | **Broken Blade**           | Deal `10%`(+ `10%` per stack) increased damage to Elites |
+| ⚒️ |  | White | **Boba**                   | Increases all base stats `1%` (+ `1%` per stack) |
+| 🏁 |  | White | **Matchbox**               | On hit, have a `10%` chance to ignite targets |
+| 🪲 |  | Green | **Bear Trap**              | Gain an additional `25%` (+ `25%` per stack) damage towards rooted or slowed targets |
+| ⚒️ |  | Green | **Ice Water**              | Attacks give enemies Ice Quake, at `5` stacks of Ice Quake the target takes a chunk of massive damage |
+| 🪲 |  | Green | **Frying Pan**             | Attacks have a chance to stun. Stunning attacks creatures increase their active debuffs by 1 stack |
+| ⚒️ |  | Green | **Sapphire Shield**        | Gain a `10%` max hit point shield when picked up, kills restore `10%` of your maximum shield. |
+| 🪲 |  | Green | **Spurs**                  | Gain additional movement speed and deal damage proportional to your movement speed |
+| 🪲 |  | Red   | **Contained Antimatter**   | Attacks have a `5%` (+ `5%` per stack) chance to deal true damage |
+| 🏁 |  | Red   | **Fortifier Band**         | Gain `25` armor. For each non-Fortifier Band in your inventory gain an additional `75` (+ `25` per stack) armor |
+| 🏁 |  | Red   | **Stiletto**               | Attacks have a `10%` chance to bleed targets and all bleed damage is increased by `100%` (+ `100%` per stack) |
+| ⚒️ |  | Red   | **Radiant Soul**           | Defeating a boss will bring summon them as a companion until they die. Up to `5` (+ `2` per stack) bosses may be under your command at a time. |
+| 🪲 |  | Red   | **Mixtape**                | Burning targets have a  `10%` (+ `5%` per stack) chance to erupt, spreading burn damage to enemies nearby. |
+| ⚒️ |  | Boss  | **Flamberge**              | Damage dealt through burns now grants barrier equal to damage deal, burn damage is increased by `50%` and gain a `10%` chance to ignite targets on hit. |
+| ⚒️ |  | Lunar | **Rabbit Foot**            | Gain `+1` roll for a favorable outcomes but invite more challenge |
+| 🏁 |  | Lunar | **Moondust Whey**          | Deal `2x` the damage but move `1/2` as quickly |
 
-| Icon | Rarity | Name | Effect | 
-|:----:|:-------| :-----|:------ |
-|  | White | **Broken Blade**           | Deal `10%`(+ `10%` per stack) increased damage to Elites |
-|  | White | **Boba**                   | Increases all base stats `1%` (+ `1%` per stack) |
-|  | White | **Matchbox**               | On hit, have a `10%` chance to ignite targets |
-|  | Green | **Bear Trap**              | Gain an additional `25%` (+ `25%` per stack) damage towards rooted or slowed targets |
-|  | Green | **Ice Water**              | Heal on killing a creature |
-|  | Green | **Frying Pan**             | Attacks on stunned creatures increase their active debuffs by 1 stack |
-|  | Green | **Sapphire Shield**        | Gain a `10%` max hit point shield when picked up, kills restore `10%` of your maximum shield. |
-|  | Green | **Spurs**                  | Gain additional movement speed and deal damage proportional to your movement speed |
-|  | Red   | **Contained Antimatter**   | Attacks have a `5%` (+ `5%` per stack) chance to deal true damage |
-|  | Red   | **Fortifier Band**         | Gain `25` armor. For each non-Fortifier Band in your inventory gain an additional `75` (+ `25` per stack) armor |
-|  | Red   | **Stiletto**               | Attacks have a `10%` chance to bleed targets and all bleed damage is increased by `100%` (+ `100%` per stack) |
-|  | Red   | **Radiant Soul**           | Defeating a boss will bring summon them as a companion until they die. Up to `5` (+ `2` per stack) bosses may be under your command at a time. |
-|  | Red   | **Mixtape**                | Burning targets have a  `10%` (+ `5%` per stack) chance to erupt, spreading burn damage to enemies nearby. |
-|  | Boss  | **Flamberge**              | Damage dealt through burns now grants barrier equal to damage deal, burn damage is increased by `50%` and gain a `10%` chance to ignite targets on hit. |
-|  | Lunar | **Rabbit Foot**            | Gain `+1` roll for a favorable outcomes but invite more challenge |
-|  | Lunar | **Moondust Whey**          | Deal `2x` the damage but move `1/2` as quickly |
+> - ✅ - Finished and fully implemented
+> - 🏁 - Modeling/Texturing
+> - 🪲 - Bugtesting
+> - ⚒️ - Development
+
+
+
+
 
 ## Artifacts
 
@@ -46,8 +54,6 @@ FirstLight is a blanket mod. It'll have a little bit of items, artifacts, equipe
 |  | **Secondary** | **Shovel Toss**  | Toss your shovel for immense damage that applies a _Status_ |
 |  | **Utility**   | **Plow**         | Charge forward dealing damage to enemies hit and gaining massive armor |
 |  | **Special**   | **Fertilizer**   | Improves your other abilities |
-
-
  
 ### Cavalier
 - As a first lieutenant aboard the UES Contant Light when it crashed. She'll help save as many crew members as she can with rapier and flare gun in hand.
