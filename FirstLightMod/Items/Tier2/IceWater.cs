@@ -4,6 +4,7 @@ using R2API;
 using RoR2;
 using UnityEngine.AddressableAssets;
 using UnityEngine;
+using TMPro;
 
 namespace FirstLightMod.Items
 {
@@ -29,7 +30,10 @@ namespace FirstLightMod.Items
 
         public float HealOnKillAmount;
 
-        public static BuffDef glacialQuakeBuff;
+        public int triggerQuakeCount;
+
+        public static BuffDef glacialBuff;
+        public static BuffDef quakeBuff;
 
 
         public override void Init(ConfigFile config)
@@ -51,15 +55,26 @@ namespace FirstLightMod.Items
                 "How much healing should the item give?"
                 ).Value;
 
-
+            triggerQuakeCount = config.Bind<int>(
+                "Item: " + ItemName,
+                "Quake Trigger Count",
+                10,
+                "How much glacial does the target need before they cause a quake?"
+            ).Value;
         }
 
         private void CreateBuffs()
         {
-            glacialQuakeBuff = Modules.Content.CreateAndAddBuff("Glacial Quake",
+            glacialBuff = Modules.Content.CreateAndAddBuff("Glacial Quake",
                 LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
-                new Color(20f, 13f, 149f),
+                new Color(104f, 135f, 247f),
                 true,
+                true);
+
+            quakeBuff = Modules.Content.CreateAndAddBuff("Glacial Quake",
+                LegacyResourcesAPI.Load<BuffDef>("BuffDefs/HiddenInvincibility").iconSprite,
+                new Color(146f, 198f, 241f),
+                false,
                 true);
 
         }
@@ -104,10 +119,61 @@ namespace FirstLightMod.Items
             On.RoR2.GlobalEventManager.OnHitEnemy += GlobalEventManager_OnHitEnemy;
         }
 
+
+
         private void GlobalEventManager_OnHitEnemy(On.RoR2.GlobalEventManager.orig_OnHitEnemy orig, GlobalEventManager self, DamageInfo damageInfo, GameObject victim)
         {
+            if (damageInfo.attacker && damageInfo.attacker.TryGetComponent(out CharacterBody attackerBody) && attackerBody.inventory)
+            {
+                if (victim && victim.TryGetComponent(out CharacterBody victimBody))
+                {
+                    if (GetCount(attackerBody) > 0)
+                    {
+                        if (victimBody.GetBuffCount(glacialBuff) < triggerQuakeCount)
+                        {
+                            victimBody.AddBuff(glacialBuff);
+
+                        }
+                        else
+                        {
+                            victimBody.AddBuff(quakeBuff);
+                        }
+                    }
 
 
+                    //Deal with the quake
+                    if (victimBody.GetBuffCount(quakeBuff) > 0)
+                    {
+
+                        //Do the blast damage to nearby creatures
+                        new BlastAttack
+                        {
+                            radius = 12f,
+                            baseDamage = 4f * victimBody.GetBuffCount(glacialBuff),
+                            procCoefficient = 0f,
+                            crit = Util.CheckRoll(attackerBody.crit),
+                            damageColorIndex = DamageColorIndex.Item,
+                            attackerFiltering = AttackerFiltering.Default,
+                            falloffModel = BlastAttack.FalloffModel.None,
+                            attacker = damageInfo.attacker,
+                            teamIndex = attackerBody.teamComponent.teamIndex,
+                            position = victimBody.corePosition
+                        }.Fire();
+                        
+                        //Remove glacial
+
+                        for (int i = 0; i < triggerQuakeCount; i++)
+                        {
+                            victimBody.RemoveBuff(glacialBuff);
+                        }
+                    }
+
+
+
+
+
+                }
+            }
 
 
 
